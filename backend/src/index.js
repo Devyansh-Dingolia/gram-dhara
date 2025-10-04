@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import connectDB from "./db/index.js";
 import { app } from "./app.js";
 import cron from 'node-cron';
+import mongoose from "mongoose";
 import { generateAnalytics } from './utils/analytics.service.js';
 import { sendPendingReportNotifications } from "./utils/notification.service.js";
 
@@ -22,6 +23,7 @@ connectDB()
 
         app.listen(PORT, () => {
             console.log(`Server is running at port: ${PORT}`);
+            console.log(`Successfully connected to database: "${mongoose.connection.name}"`);
             console.log(`Login endpoint available at: http://localhost:${PORT}/api/v1/users/login`);
 
             // Schedule the notification task

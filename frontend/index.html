@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gram Dhara - Empowering Rural Water Management</title>
+    <link rel="stylesheet" href="style/style.css">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Add Leaflet CSS and JavaScript -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        /* Enhanced heading styles */
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            font-size: 2.75rem !important;
+            line-height: 1.2;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #1976d2, #43a047);
+        }
+
+        /* Hero heading enhancement */
+        .hero-heading {
+            font-size: 4.5rem !important;
+            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Section subtitle enhancement */
+        .section-subtitle {
+            font-size: 1.25rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Secondary heading styles */
+        .content-heading {
+            font-size: 2.25rem !important;
+            line-height: 1.2;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Round button styles */
+        .btn-round {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .btn-round:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-round i {
+            font-size: 1.5rem;
+        }
+
+        /* Fixed position round buttons */
+        .fixed-btn-round {
+            position: fixed;
+            z-index: 50;
+        }
+
+        /* Chat widget animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        #chat-widget {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* Dark mode specific chat styles */
+        .dark #chat-widget {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        #chat-body {
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+        }
+
+        /* Typing animation dots */
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Pulse animation for emergency icons */
+        @keyframes pulse-emergency {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .pulse-icon {
+            display: inline-block;
+            animation: pulse-emergency 2s infinite ease-in-out;
+        }
+
+        /* Different timing for each emergency icon for visual variety */
+        .emergency-icon:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .emergency-icon:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .emergency-icon:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        .emergency-icon:nth-child(4) {
+            animation-delay: 1.5s;
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#e3f2fd',
+                            100: '#bbdefb',
+                            200: '#90caf9',
+                            300: '#64b5f6',
+                            400: '#42a5f5',
+                            500: '#2196f3',
+                            600: '#1e88e5',
+                            700: '#1976d2',
+                            800: '#1565c0',
+                            900: '#0d47a1',
+                        },
+                        secondary: {
+                            50: '#e8f5e9',
+                            100: '#c8e6c9',
+                            200: '#a5d6a7',
+                            300: '#81c784',
+                            400: '#66bb6a',
+                            500: '#4caf50',
+                            600: '#43a047',
+                            700: '#388e3c',
+                            800: '#2e7d32',
+                            900: '#1b5e20',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "url('https://images.unsplash.com/photo-1625493932387-501d3f5f925e?q=80&w=2070')",
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="icon" type="image/x-icon" href="images/fab-icon.png">
+</head>
+
+<body class="font-sans bg-slate-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="fixed-btn-round left-6 bottom-6 btn-round
+                   bg-white dark:bg-gray-800
+                   text-gray-800 dark:text-gray-200
+                   hover:bg-gray-100 dark:hover:bg-gray-700
+                   transition">
+        <i class="bi bi-moon-stars-fill dark:hidden"></i>
+        <i class="bi bi-sun-fill hidden dark:inline"></i>
+    </button>
+
+    <!-- Chat Button -->
+    <button id="chat-toggle"
+        class="fixed-btn-round right-6 bottom-6 btn-round bg-primary-600 hover:bg-primary-700 text-white">
+        <i class="bi bi-chat-dots-fill"></i>
+    </button>
+
+    <!-- New Header Navigation with Trapezoid Logo -->
+    <header class="navbar-container">
+        <div class="trapezoid-logo">
+            <a href="#home">
+                <img src="images/logo.png" alt="Gram Dhara Logo">
+            </a>
+        </div>
+
+        <div class="info-bar">
+            <div class="contact-info">
+                <span class="mail"><i class="bi bi-envelope-fill"></i> &nbsp; info@gramdhara.gov.in</span>
+                <span class="phone"> &nbsp; &nbsp; | &nbsp; &nbsp;<i class="bi bi-telephone-fill"></i> &nbsp;Helpline:
+                    +91 1800-111-222</span>
+            </div>
+
+            <div class="support-social">
+                <a href="#"
+                    class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400">Help and
+                    support</a>
+                &nbsp; | &nbsp;
+                <a href="#"><i
+                        class="bi bi-facebook text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"></i></a>
+                &nbsp; | &nbsp;
+                <a href="#"><i
+                        class="bi bi-twitter text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"></i></a>
+                &nbsp; | &nbsp;
+                <a href="#"><i
+                        class="bi bi-linkedin text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"></i></a>
+            </div>
+        </div>
+
+        <div class="main-nav">
+            <nav class="nav-links">
+                <a class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#home">Home</a>
+                <a class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#features">Features</a>
+                <a class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#how-it-works">How It Works</a>
+                <a class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#impact">Impact</a>
+                <a class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#contact">Contact</a>
+            </nav>
+
+            <div>
+                <a href="/login/login.html"
+                    class="bg-gradient-to-r from-blue-600 to-blue-400 text-white font-medium py-3 px-8 rounded-full shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-xl m-4">
+                    Login &nbsp; <i class="bi bi-door-open"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 shadow-md transition-colors">
+            <div class="container mx-auto px-4 py-3 space-y-2">
+                <a class="block py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#home">Home</a>
+                <a class="block py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#features">Features</a>
+                <a class="block py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#how-it-works">How It Works</a>
+                <a class="block py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#impact">Impact</a>
+                <a class="block py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium"
+                    href="#contact">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Spacer to prevent content from being hidden under the fixed navbar -->
+    <div class="h-[125px]"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative flex items-center justify-center min-h-screen text-white overflow-hidden">
+        <div class="absolute inset-0">
+            <video autoplay muted loop class="w-full h-full object-cover">
+                <source src="https://cdn.pixabay.com/video/2024/09/14/231479_large.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="absolute inset-0 bg-black/50"></div>
+        </div>
+        <div class="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="hero-heading fade-in">
+                    Water Management. <br> Like Never Before.
+                </h1>
+                <p class="mt-6 text-lg md:text-xl max-w-3xl mx-auto fade-in-delay-1">
+                    Simple, low-cost digital tools for efficient operation and maintenance of rural piped water supply
+                    systems under the Jal Jeevan Mission.
+                </p>
+                <div class="mt-10 flex flex-col sm:flex-row justify-center gap-6 fade-in-delay-2">
+                    <a href="login/login.html"
+                        class="bg-primary-600 hover:bg-primary-700 text-white font-medium py-4 px-10 rounded-full shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-3">
+                        <span class="text-lg">Report Water Issue</span>
+                        <i class="bi bi-arrow-right text-xl"></i>
+                    </a>
+                    <a href="#features"
+                        class="bg-white/20 hover:bg-white/30 text-white font-medium py-4 px-10 rounded-full shadow-lg transform hover:scale-105 transition-all text-lg">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <a href="#features" class="text-white/80 hover:text-white">
+                    <i class="bi bi-chevron-down text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Statistics -->
+    <section class="py-16 bg-white dark:bg-gray-800 transition-colors">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div
+                    class="flex flex-col items-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md transition-all hover:shadow-lg transform hover:-translate-y-2 transition-colors glass-card">
+                    <div class="text-primary-600 dark:text-primary-400 mb-4">
+                        <i class="bi bi-droplet-half text-4xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-3xl font-bold text-gray-800 dark:text-white">90%+</p>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">Reliable Water Supply</p>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col items-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md transition-all hover:shadow-lg transform hover:-translate-y-2 transition-colors glass-card">
+                    <div class="text-primary-600 dark:text-primary-400 mb-4">
+                        <i class="bi bi-house-door text-4xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-3xl font-bold text-gray-800 dark:text-white">5,000+</p>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">Villages Covered</p>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col items-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md transition-all hover:shadow-lg transform hover:-translate-y-2 transition-colors glass-card">
+                    <div class="text-primary-600 dark:text-primary-400 mb-4">
+                        <i class="bi bi-people-fill text-4xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-3xl font-bold text-gray-800 dark:text-white">2,500+</p>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">Gram Panchayats</p>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col items-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md transition-all hover:shadow-lg transform hover:-translate-y-2 transition-colors glass-card">
+                    <div class="text-primary-600 dark:text-primary-400 mb-4">
+                        <i class="bi bi-tools text-4xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-3xl font-bold text-gray-800 dark:text-white">10,000+</p>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">Issues Resolved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-slate-50 dark:bg-gray-900 transition-colors">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="section-title text-gradient">
+                    Streamlining Rural Water Management
+                </h2>
+                <p class="section-subtitle text-gray-600 dark:text-gray-300 mt-4">
+                    Our low-cost digital tools make daily operation and maintenance of water supply systems simple and
+                    effective
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg transform hover:-translate-y-1 transition-colors">
+                    <div class="h-3 bg-primary-600"></div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-3 rounded-full">
+                                <i class="bi bi-hourglass text-2xl text-primary-600 dark:text-primary-400"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white ml-4">
+                                Pump Monitoring
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Track pump running hours to optimize energy consumption and schedule maintenance through our
+                            simple mobile interface.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg transform hover:-translate-y-1 transition-colors">
+                    <div class="h-3 bg-secondary-600"></div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-secondary-100 dark:bg-secondary-900/30 p-3 rounded-full">
+                                <i class="bi bi-droplet text-2xl text-secondary-600 dark:text-secondary-400"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white ml-4">
+                                Water Quality Testing
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Ensure safe drinking water with easy-to-use portable testing kits. Results are digitally
+                            recorded for transparency.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg transform hover:-translate-y-1 transition-colors">
+                    <div class="h-3 bg-purple-600"></div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-full">
+                                <i class="bi bi-graph-up text-2xl text-purple-600 dark:text-purple-400"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white ml-4">
+                                Predictive Analytics
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Use data insights to anticipate maintenance needs before major issues occur, reducing
+                            downtime and repair costs.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg transform hover:-translate-y-1 transition-colors">
+                    <div class="h-3 bg-amber-600"></div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-amber-100 dark:bg-amber-900/30 p-3 rounded-full">
+                                <i class="bi bi-exclamation-triangle text-2xl text-amber-600 dark:text-amber-400"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white ml-4">
+                                Leak Detection
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Quickly identify and address leaks in the water supply system to conserve water and prevent
+                            wastage.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg transform hover:-translate-y-1 transition-colors">
+                    <div class="h-3 bg-rose-600"></div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-rose-100 dark:bg-rose-900/30 p-3 rounded-full">
+                                <i class="bi bi-journal-check text-2xl text-rose-600 dark:text-rose-400"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white ml-4">
+                                Maintenance Scheduling
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Plan and track routine maintenance tasks with automated reminders for timely servicing of
+                            water infrastructure.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg transform hover:-translate-y-1 transition-colors">
+                    <div class="h-3 bg-emerald-600"></div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-full">
+                                <i class="bi bi-phone text-2xl text-emerald-600 dark:text-emerald-400"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white ml-4">
+                                Mobile Accessibility
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Access all tools and data from any mobile device, even in areas with limited connectivity
+                            through offline capabilities.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 bg-white dark:bg-gray-800 transition-colors">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="section-title text-gradient">
+                    How It Works
+                </h2>
+                <p class="section-subtitle text-gray-600 dark:text-gray-300 mt-4">
+                    Simple steps for Gram Panchayats to manage their water supply systems effectively
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-center items-start gap-8 md:gap-16">
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center max-w-xs text-center">
+                    <div
+                        class="w-16 h-16 rounded-full flex items-center justify-center bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 mb-6">
+                        <span class="text-xl font-bold">1</span>
+                    </div>
+                    <div class="bg-primary-50 dark:bg-primary-900/20 p-6 rounded-xl w-full">
+                        <div class="flex justify-center mb-4">
+                            <i class="bi bi-phone-fill text-4xl text-primary-600 dark:text-primary-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Register</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Register your Gram Panchayat and water
+                            infrastructure in our simple mobile app</p>
+                    </div>
+                </div>
+
+                <!-- Connector -->
+                <div class="hidden md:block pt-8">
+                    <i class="bi bi-arrow-right text-3xl text-gray-400 dark:text-gray-500"></i>
+                </div>
+                <div class="block md:hidden py-4">
+                    <i class="bi bi-arrow-down text-3xl text-gray-400 dark:text-gray-500"></i>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center max-w-xs text-center">
+                    <div
+                        class="w-16 h-16 rounded-full flex items-center justify-center bg-secondary-100 dark:bg-secondary-900/30 text-secondary-600 dark:text-secondary-400 mb-6">
+                        <span class="text-xl font-bold">2</span>
+                    </div>
+                    <div class="bg-secondary-50 dark:bg-secondary-900/20 p-6 rounded-xl w-full">
+                        <div class="flex justify-center mb-4">
+                            <i class="bi bi-clipboard2-data text-4xl text-secondary-600 dark:text-secondary-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Monitor</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Perform regular checks of pump operation, water
+                            quality, and system integrity</p>
+                    </div>
+                </div>
+
+                <!-- Connector -->
+                <div class="hidden md:block pt-8">
+                    <i class="bi bi-arrow-right text-3xl text-gray-400 dark:text-gray-500"></i>
+                </div>
+                <div class="block md:hidden py-4">
+                    <i class="bi bi-arrow-down text-3xl text-gray-400 dark:text-gray-500"></i>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center max-w-xs text-center">
+                    <div
+                        class="w-16 h-16 rounded-full flex items-center justify-center bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 mb-6">
+                        <span class="text-xl font-bold">3</span>
+                    </div>
+                    <div class="bg-amber-50 dark:bg-amber-900/20 p-6 rounded-xl w-full">
+                        <div class="flex justify-center mb-4">
+                            <i class="bi bi-tools text-4xl text-amber-600 dark:text-amber-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Maintain</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Follow recommended maintenance tasks and address
+                            issues proactively</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-16 text-center">
+                <a href="login/login.html"
+                    class="inline-block bg-gradient-to-r from-primary-600 to-primary-700 text-white font-medium py-4 px-10 rounded-full shadow-lg transform hover:scale-105 transition-all text-lg">
+                    Get Started Today
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impact" class="py-16 bg-slate-50 dark:bg-gray-900 transition-colors">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="section-title text-gradient">
+                    Our Impact
+                </h2>
+                <p class="section-subtitle text-gray-600 dark:text-gray-300 mt-4">
+                    Making a difference in rural communities through sustainable water management
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="content-heading text-gradient">
+                        Empowering Rural Communities
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        Our digital tools have empowered Gram Panchayats across rural India to take ownership of their
+                        water supply systems. By providing simple, accessible technology, we're helping ensure
+                        sustainable access to clean water.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="bi bi-check-circle-fill text-secondary-600 dark:text-secondary-400 mt-1 mr-2"></i>
+                            <span class="text-gray-600 dark:text-gray-300">Reduced system downtime by 60% through
+                                preventive maintenance</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="bi bi-check-circle-fill text-secondary-600 dark:text-secondary-400 mt-1 mr-2"></i>
+                            <span class="text-gray-600 dark:text-gray-300">Improved water quality testing compliance by
+                                85%</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="bi bi-check-circle-fill text-secondary-600 dark:text-secondary-400 mt-1 mr-2"></i>
+                            <span class="text-gray-600 dark:text-gray-300">Decreased water wastage by 40% through early
+                                leak detection</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="bi bi-check-circle-fill text-secondary-600 dark:text-secondary-400 mt-1 mr-2"></i>
+                            <span class="text-gray-600 dark:text-gray-300">Trained over 5,000 village-level
+                                functionaries in water system management</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="relative">
+                    <!-- Replacing image with interactive map -->
+                    <div id="map-container"></div>
+                    <div class="absolute z-40 -bottom-8 -right-8 hidden md:block">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg transition-colors animate-float">
+                            <div class="flex items-center space-x-2">
+                                <i class="bi bi-droplet-fill text-primary-600 dark:text-primary-400 text-xl"></i>
+                                <p class="font-semibold text-gray-900 dark:text-white">40 Gram Panchayats across India
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-white dark:bg-gray-800 transition-colors">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="section-title text-gradient">
+                    Success Stories
+                </h2>
+                <p class="section-subtitle text-gray-600 dark:text-gray-300 mt-4">
+                    Hear from our community members about the impact of our tools
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md transition-colors">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400">
+                            <i class="bi bi-person-fill text-2xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white">Ramesh Kumar</h4>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Sarpanch, Sundarpur Gram Panchayat</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        "Before using this system, we struggled with frequent pump failures and water quality issues.
+                        Now we can monitor everything easily and solve problems before they become serious. Our village
+                        has reliable water supply for the first time."
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md transition-colors">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 bg-secondary-100 dark:bg-secondary-900/30 rounded-full flex items-center justify-center text-secondary-600 dark:text-secondary-400">
+                            <i class="bi bi-person-fill text-2xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white">Priya Sharma</h4>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">VWSC Member, Chandpur Village</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        "The water quality testing tools are so simple that even community members with little education
+                        can use them. Now we test regularly and everyone in the village feels confident about the water
+                        they drink."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="relative py-20 bg-gradient-to-r from-primary-700 to-primary-900 text-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="content-heading text-white mb-4">Ready to Transform Your Village's Water Management?</h2>
+                    <p class="text-lg mb-8">Join thousands of Gram Panchayats already benefiting from our digital tools.
+                        Get started today to ensure sustainable water supply for your community.</p>
+                    <div class="flex flex-col sm:flex-row gap-6">
+                        <a href="login/login.html"
+                            class="bg-white text-primary-700 hover:bg-gray-100 font-medium py-4 px-10 rounded-full shadow-lg transform hover:scale-105 transition-all text-lg">
+                            Register Your GP
+                        </a>
+                        <a href="login/login.html"
+                            class="bg-white/20 hover:bg-white/30 text-white font-medium py-4 px-10 rounded-full shadow-lg transform hover:scale-105 transition-all text-lg">
+                            Request Demo
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <img src="images/ladies.png" alt="Rural water tap"
+                        class="rounded-xl shadow-lg max-h-[400px] w-full object-cover">
+                </div>
+            </div>
+
+            <!-- Water drops animation in background -->
+            <div class="absolute top-12 left-12 opacity-10">
+                <i class="bi bi-droplet-fill text-8xl"></i>
+            </div>
+            <div class="absolute bottom-12 right-12 opacity-10">
+                <i class="bi bi-droplet-fill text-6xl"></i>
+            </div>
+            <div class="absolute top-1/2 right-1/4 opacity-10">
+                <i class="bi bi-droplet-fill text-5xl"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Helpline Section -->
+    <section class="py-16 bg-slate-50 dark:bg-gray-900 transition-colors">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="section-title text-gradient">
+                    Emergency Helplines
+                </h2>
+                <p class="section-subtitle text-gray-600 dark:text-gray-300">
+                    Contact these numbers for immediate assistance with water-related emergencies
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Helpline 1 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-t-4 border-primary-600 transition-colors hover:-translate-y-2  transform">
+                    <div class="p-6 text-center">
+                        <div class="text-5xl mb-4 pulse-icon emergency-icon">💧</div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Water Emergency</h3>
+                        <a href="tel:1916"
+                            class="inline-block bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-8 rounded-full  hover:scale-105  text-lg">
+                            1916
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Helpline 2 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-t-4 border-rose-600 transition-colors hover:-translate-y-2  transform">
+                    <div class="p-6 text-center">
+                        <div class="text-5xl mb-4 pulse-icon emergency-icon">🚑</div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Medical Emergency</h3>
+                        <a href="tel:108"
+                            class="inline-block bg-rose-600 hover:bg-rose-700 text-white font-medium py-3 px-8 rounded-full transition-colors hover:scale-105  text-lg">
+                            108
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Helpline 3 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-t-4 border-amber-600 transition-colors hover:-translate-y-2  transform">
+                    <div class="p-6 text-center">
+                        <div class="text-5xl mb-4 pulse-icon emergency-icon">⚡</div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Disaster Management</h3>
+                        <a href="tel:1070"
+                            class="inline-block bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-8 rounded-full transition-colors hover:scale-105  text-lg">
+                            1070
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Helpline 4 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-t-4 border-secondary-600 transition-colors hover:-translate-y-2  transform">
+                    <div class="p-6 text-center">
+                        <div class="text-5xl mb-4 pulse-icon emergency-icon">👮</div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Police</h3>
+                        <a href="tel:100"
+                            class="inline-block bg-secondary-600 hover:bg-secondary-700 text-white font-medium py-3 px-8 rounded-full transition-colors hover:scale-105   text-lg">
+                            100
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="bi bi-droplet-fill text-primary-400 text-2xl"></i>
+                        <span class="text-xl font-bold">Gram Dhara</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Empowering Gram Panchayats with low-cost digital tools for water management.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">Features</a>
+                        </li>
+                        <li><a href="#how-it-works" class="text-gray-400 hover:text-white transition-colors">How It
+                                Works</a></li>
+                        <li><a href="#impact" class="text-gray-400 hover:text-white transition-colors">Impact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="bi bi-envelope text-primary-400 mr-2 mt-1"></i>
+                            <span class="text-gray-400">info@gramdhara.gov.in</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="bi bi-telephone text-primary-400 mr-2 mt-1"></i>
+                            <span class="text-gray-400">+91 1800-111-222</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="bi bi-geo-alt text-primary-400 mr-2 mt-1"></i>
+                            <span class="text-gray-400">Ministry of Jal Shakti, New Delhi</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-center items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                    © 2025 GramDhara, Ministry of Jal Shakti. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chat Widget (updated with enhanced functionality) -->
+    <div id="chat-widget"
+        class="fixed right-10 bottom-28 z-50 bg-white dark:bg-gray-800 rounded-lg shadow-xl w-80 h-[450px] flex flex-col transform translate-y-full opacity-0 invisible transition-colors">
+        <div class="bg-primary-600 text-white p-4 rounded-t-lg flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-xl mr-2">💧</span>
+                <span class="font-medium">Water Assistant</span>
+            </div>
+            <button id="close-chat"
+                class="text-white hover:text-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div id="chat-body"
+            class="p-4 h-85 overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-transparent bg-gray-50 dark:bg-gray-850">
+        </div>
+        <form id="chat-form" class="border-t border-gray-200 dark:border-gray-700 p-3 flex items-center">
+            <input id="chat-input" type="text" placeholder="Type your question..."
+                class="flex-1 bg-gray-100 dark:bg-gray-700 border-0 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-white text-gray-800" />
+            <button type="submit"
+                class="ml-2 bg-primary-500 hover:bg-primary-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="chatBot.js"></script>
+</body>
+
+</html>
