@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    async function updateStatCard () {
+    async function updateStatCard() {
         try {
             if (!window.reportsAPI) {
                 console.error("Reports API is not available.");
@@ -101,26 +101,85 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    async function addDynamicReports() {
+    function createTimelineItemHTML(item) {
+        // Determine icon and color based on the item type
+        let iconClass = 'blue';
+        let icon = 'bi-bell'; // Default to notification
+
+        if (item.type === 'report') {
+            iconClass = 'purple';
+            icon = 'bi-file-earmark-plus';
+        }
+
+        // Format the date for display
+        const itemDate = new Date(item.date).toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            hour: 'numeric',
+            minute: '2-digit'
+        });
+
+        return `
+        <div class="timeline-item">
+            <div class="timeline-icon ${iconClass}">
+                <i class="bi ${icon}"></i>
+            </div>
+            <div class="timeline-content">
+                <h3>${item.title}</h3>
+                <p>${item.description}</p>
+                <span class="timeline-time">${itemDate}</span>
+            </div>
+        </div>
+    `;
+    }
+
+    async function updateActivityTimeline() {
+        const timelineContainer = document.querySelector('#activity-timeline .timeline');
+        if (!timelineContainer) return;
+
         try {
-            if (!window.reportsAPI) {
-                console.error("Reports API is not available.");
-                return;
+            // Fetch both reports and notifications in parallel for speed
+            const [reportsRes, notificationsRes] = await Promise.all([
+                window.reportsAPI ? window.reportsAPI.getMyReports() : Promise.resolve({ data: [] }),
+                window.notificationsAPI ? window.notificationsAPI.getMyNotifications() : Promise.resolve({ data: [] })
+            ]);
+
+            let combinedActivities = [];
+
+            // Normalize reports into a common format
+            if (reportsRes.success && Array.isArray(reportsRes.data)) {
+                const normalizedReports = reportsRes.data.map(report => ({
+                    date: new Date(report.createdAt),
+                    title: 'New Report Submitted',
+                    description: report.title || 'Untitled Report',
+                    type: 'report'
+                }));
+                combinedActivities.push(...normalizedReports);
             }
 
-            const response = await window.reportsAPI.getMyReports();
-            if (response && response.success && Array.isArray(response.data)) {
-                const reports = response.data;
-
-                // Reverse to show the newest first
-                reports.reverse().forEach(report => {
-                    const reportHTML = createReportHTML(report);
-                    // Add the new report at the beginning of the container
-                    recentReportsContainer.insertAdjacentHTML('afterbegin', reportHTML);
-                });
+            // Normalize notifications into a common format
+            if (notificationsRes.success && Array.isArray(notificationsRes.data)) {
+                const normalizedNotifications = notificationsRes.data.map(notif => ({
+                    date: new Date(notif.createdAt),
+                    title: notif.title || 'New Notification',
+                    description: notif.message,
+                    type: 'notification'
+                }));
+                combinedActivities.push(...normalizedNotifications);
             }
+
+            // Sort all items by date, newest first
+            combinedActivities.sort((a, b) => b.date - a.date);
+
+            // Create and append the HTML for each item
+            combinedActivities.forEach(item => {
+                const itemHTML = createTimelineItemHTML(item);
+                // insertAdjacentHTML is efficient and adds to the end of the container
+                timelineContainer.insertAdjacentHTML('afterbegin', itemHTML);
+            });
+
         } catch (error) {
-            console.error("Error fetching user reports:", error);
+            console.error("Error building activity timeline:", error);
         }
     }
 
@@ -167,6 +226,115 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     }
 
+    // Add the logout function if it doesn't already exist
+    function logout() {
+        try {
+            // Clear all authentication data from localStorage
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('refreshToken');
+
+            // Clear all session storage
+            sessionStorage.clear();
+
+            // Clear any cookies (if using httpOnly cookies)
+            document.cookie.split(";").forEach(function (c) {
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            });
+
+            console.log('User logged out successfully - all data cleared');
+
+            // Redirect to login page
+            window.location.href = '../../../index.html';
+        } catch (error) {
+            console.error('Logout error:', error);
+
+            // Even if there's an error, clear local data and redirect
+            localStorage.clear();
+            sessionStorage.clear();
+            console.log('Forced logout due to error - all data cleared');
+            alert('Logged out successfully');
+            window.location.href = '../../login/login.html';
+        }
+    }
+
+    // Logout function
+    function initializeLogoutButtons() {
+        // Find all possible logout elements
+        const logoutButtons = document.querySelectorAll('.logout, .logout-btn, [data-action="logout"]');
+        const logoutLinks = document.querySelectorAll('a[href*="logout"], a.logout');
+
+        // Attach logout to all logout buttons
+        logoutButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                logout();
+            });
+        });
+
+        // Attach logout to all logout links
+        logoutLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                logout();
+            });
+        });
+
+        // Add keyboard shortcut for logout (Ctrl+Alt+L)
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && e.altKey && e.key === 'l') {
+                e.preventDefault();
+                logout();
+            }
+        });
+
+        console.log(`Logout functionality attached to ${logoutButtons.length + logoutLinks.length} elements`);
+    }
+
+    // Auto-logout on token expiration
+    function checkTokenExpiration() {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            console.log('No token found, redirecting to login');
+            window.location.href = '../../login/login.html';
+            return;
+        }
+
+        try {
+            // Decode JWT token to check expiration
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Math.floor(Date.now() / 1000);
+
+            if (payload.exp && payload.exp < currentTime) {
+                console.log('Token expired, auto-logging out');
+                alert('Your session has expired. Please log in again.');
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = '../../login/login.html';
+            }
+        } catch (error) {
+            console.error('Error checking token expiration:', error);
+            // If token is malformed, clear it and redirect
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = '../../login/login.html';
+        }
+    }
+
+    // Initialize logout functionality
+    initializeLogoutButtons();
+
+    // Check token expiration immediately
+    checkTokenExpiration();
+
+    // Check token expiration every hour
+    setInterval(checkTokenExpiration, 60 * 60 * 1000);
+
+    console.log('Token expiration check initialized');
+
     async function initializeDashboard() {
         // Make sure the API client is ready before making calls
         if (typeof window.waitForAPI === 'function') {
@@ -179,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
             updateUserInformation(),
             updateNotificationCount(),
             updateStatCard(),
-            addDynamicReports()
+            updateActivityTimeline()
         ]).then(() => {
             console.log("Dashboard initialized successfully.");
         });
