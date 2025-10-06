@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -7,22 +7,26 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.routes.js";
 import categoryRoutes from "./routes/category.router.js";
 import notificationRoutes from "./routes/notification.router.js";
-import departmentRoutes from './routes/department.router.js';
-import analyticsRoutes from './routes/analytic.router.js';
-import adminRoutes from './routes/admin.router.js';
-import reportHistoryRoutes from './routes/reportHistory.router.js';
-import reportRoutes from './routes/report.router.js';
-import reportAssignmentRoutes from './routes/reportAssignment.router.js';
-import superAdminRoutes from './routes/superAdmin.router.js'; // New import
-import { errorMiddleware } from './middlewares/error.middleware.js';
+import departmentRoutes from "./routes/department.router.js";
+import analyticsRoutes from "./routes/analytic.router.js";
+import adminRoutes from "./routes/admin.router.js";
+import reportHistoryRoutes from "./routes/reportHistory.router.js";
+import reportRoutes from "./routes/report.router.js";
+import reportAssignmentRoutes from "./routes/reportAssignment.router.js";
+import superAdminRoutes from "./routes/superAdmin.router.js"; // New import
+import { errorMiddleware } from "./middlewares/error.middleware.js";
 
+import noticeRoutes from "./routes/notice.router.js"; // <--- ADD THIS
+// ...
 const app = express();
 
 // Middleware to set up CORS
-app.use(cors({
+app.use(
+  cors({
     origin: process.env.CORS_ORIGIN,
-    credentials: true
-}));
+    credentials: true,
+  })
+);
 
 // Middleware to parse JSON and URL-encoded bodies
 app.use(express.json({ limit: "16kb" }));
@@ -64,6 +68,14 @@ app.use("/api/v1/assignments", reportAssignmentRoutes);
 
 // New super admin routes
 app.use("/api/v1/super-admin", superAdminRoutes);
+
+// Base route for notices (announcements) <--- ADD THIS
+app.use("/api/v1/notices", noticeRoutes);
+
+// Error handling middleware (must be last)
+app.use(errorMiddleware);
+
+// ...
 
 // Apply the global error handling middleware.
 // This MUST be the last middleware added.
