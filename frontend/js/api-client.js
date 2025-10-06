@@ -90,6 +90,13 @@ const authAPI = {
         return apiRequest('/api/v1/users/current-user', {
             method: 'GET'
         });
+    },
+
+    changePassword: (data) => {
+        return apiRequest('/api/v1/users/change-password', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
     }
 };
 
@@ -218,12 +225,53 @@ const analyticsAPI = {
     getDashboardData: () => apiRequest('/api/v1/analytics/dashboard'),
 };
 
+const noticeAPI = {
+    getAllNotices: () => {
+        return apiRequest('/api/v1/notices/public/all', {
+            method: 'GET'
+        });
+    },
+
+    getAdminNotices: () => {
+        return apiRequest('/api/v1/notices/admin/all', {
+            method: 'GET'
+        });
+    },
+
+    createNotice: (data) => {
+        return apiRequest('/api/v1/notices/create', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    },
+
+    updateNotice: (noticeId, data) => {
+        return apiRequest(`/api/v1/notices/${noticeId}`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+        });
+    },
+
+    deleteNotice: (noticeId) => {
+        return apiRequest(`/api/v1/notices/${noticeId}`, {
+            method: 'DELETE',
+        });
+    },
+
+    getNoticeById: (noticeId) => {
+        return apiRequest(`/api/v1/notices/${noticeId}`, {
+            method: 'GET',
+        });
+    }
+}
+
 // Make APIs globally available
 window.authAPI = authAPI;
 window.reportsAPI = reportsAPI;
 window.analyticsAPI = analyticsAPI;
 window.categoriesAPI = categoriesAPI;
 window.notificationsAPI = notificationsAPI;
+window.noticeAPI = noticeAPI;
 window.validateToken = validateToken;
 
 // Wait for API to be ready function
