@@ -1,0 +1,421 @@
+/* Import base styles from the main dashboard */
+@import url('../style.css');
+
+/* User Profile Card Styles */
+.user-profile-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.user-profile-card:hover {
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Subtle animation - light moving gradient */
+.user-profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0)
+    );
+    animation: lightSweep 8s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes lightSweep {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(50%);
+    }
+}
+
+.profile-card-header {
+    padding: 2rem;
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    position: relative;
+}
+
+.profile-avatar-container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+#profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid white;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+#profile-avatar:hover {
+    transform: scale(1.05);
+}
+
+.profile-header-info {
+    flex: 1;
+}
+
+#profile-name-header {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.role-badge {
+    display: inline-block;
+    background-color: rgba(25, 118, 210, 0.1);
+    padding: 0.25rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.profile-card-body {
+    padding: 2rem;
+}
+
+/* Form Styles */
+#profile-details-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-dark);
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.form-group input:disabled {
+    background-color: #f0f2f5;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.form-group input:not(:disabled):focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+    outline: none;
+}
+
+/* Actions Section */
+.profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid #e0e0e0;
+    color: var(--text-dark);
+}
+
+.btn-outline:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Password Section */
+.password-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    position: relative;
+}
+
+/* Subtle animation for section dividers */
+.password-section::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background-color: var(--primary-color);
+    animation: expandWidth 3s infinite alternate ease-in-out;
+}
+
+@keyframes expandWidth {
+    from {
+        width: 50px;
+    }
+    to {
+        width: 150px;
+    }
+}
+
+.section-title {
+    font-size: 1.3rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.password-requirements {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f0f2f5;
+    border-radius: var(--border-radius);
+}
+
+.requirement-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.requirement-item i {
+    margin-right: 0.5rem;
+    color: var(--success-color);
+}
+
+.requirement-item.invalid i {
+    color: var(--danger-color);
+}
+
+/* Notification Preferences */
+.notification-preferences {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    position: relative;
+}
+
+/* Subtle animation for section dividers - same as password section */
+.notification-preferences::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background-color: var(--primary-color);
+    animation: expandWidth 3s infinite alternate ease-in-out;
+    animation-delay: 1.5s;
+}
+
+.preference-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.preference-info h4 {
+    font-size: 1rem;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
+
+.preference-info p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .profile-avatar-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    #profile-avatar {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .profile-card-header {
+        padding: 1.5rem;
+    }
+    
+    .profile-card-body {
+        padding: 1.5rem;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
+
+/* Dark Mode Support */
+body.dark .user-profile-card {
+    background-color: var(--bg-dark);
+}
+
+body.dark .profile-card-header {
+    background-color: rgba(25, 118, 210, 0.1);
+}
+
+body.dark .form-group input {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: white;
+}
+
+body.dark .form-group input:disabled {
+    background-color: #2d3748;
+    opacity: 0.7;
+}
+
+body.dark .password-requirements {
+    background-color: #2d3748;
+}
+
+body.dark .btn-outline {
+    border-color: #4a5568;
+    color: #e2e8f0;
+}
+
+body.dark .btn-outline:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Animation for profile card */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-profile-card {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
