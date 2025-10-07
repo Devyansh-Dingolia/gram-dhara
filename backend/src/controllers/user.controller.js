@@ -101,7 +101,7 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!isPasswordValid) {
         throw new ApiError(401, "Invalid credentials");
     }
-
+    console.log('Password is valid for user:', user.email);
     // Convert legacy 'user' role to 'citizen' without saving to avoid validation error
     let userRole = user.role;
     if (user.role === 'user') {
@@ -182,13 +182,20 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
     const { oldPassword, newPassword } = req.body;
-    const { user } = req;
+
+    const userId = req.user?._id;
+    const userFromDb = await User.findById(userId);
+
+    if (!userFromDb) {
+        throw new ApiError(404, "User not found");
+    }
 
     if (!oldPassword || !newPassword) {
         throw new ApiError(400, "Both old and new password are required");
     }
 
-    const isPasswordValid = await bcrypt.compare(oldPassword, user.passwordHash);
+    const isPasswordValid = await bcrypt.compare(oldPassword, userFromDb.passwordHash);
+    
     if (!isPasswordValid) {
         throw new ApiError(400, "Old password is not correct");
     }
@@ -198,7 +205,8 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await User.findByIdAndUpdate(user._id, { passwordHash: hashedPassword });
+    userFromDb.passwordHash = hashedPassword;
+    await userFromDb.save({ validateBeforeSave: false });
 
     return res.status(200).json(new ApiResponse(200, {}, "Password changed successfully"));
 });

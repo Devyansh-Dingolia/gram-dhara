@@ -125,9 +125,16 @@
                                 <input type="text" id="profile-phone" value="Loading..." disabled>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="profile-userid">User ID</label>
-                            <input type="text" id="profile-userid" value="Loading..." disabled>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-userid">User ID</label>
+                                <input type="text" id="profile-userid" value="Loading..." disabled>
+                            </div>
+                            <div class="form-group password-button-container">
+                                <button type="button" id="change-password-btn" class="btn btn-primary">
+                                    <i class="bi bi-key"></i> Change Password
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -135,6 +142,70 @@
 
         </main>
     </div>
+
+    <!-- Password Change Modal Overlay -->
+    <div id="password-modal" class="modal-overlay">
+        <div class="password-modal-content">
+            <div class="modal-header">
+                <h2>Change Password</h2>
+                <button type="button" class="close-modal"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="password-change-form">
+                    <div class="form-group">
+                        <label for="old-password">Current Password</label>
+                        <input type="password" id="old-password" placeholder="Enter your current password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" placeholder="Enter your new password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm your new password" required>
+                    </div>
+                    <div class="password-requirements">
+                        <p>Password requirements:</p>
+                        <div class="requirement-item" id="req-length">
+                            <i class="bi bi-check-circle"></i> At least 8 characters
+                        </div>
+                        <div class="requirement-item" id="req-uppercase">
+                            <i class="bi bi-check-circle"></i> At least one uppercase letter
+                        </div>
+                        <div class="requirement-item" id="req-lowercase">
+                            <i class="bi bi-check-circle"></i> At least one lowercase letter
+                        </div>
+                        <div class="requirement-item" id="req-number">
+                            <i class="bi bi-check-circle"></i> At least one number
+                        </div>
+                        <div class="requirement-item" id="req-match">
+                            <i class="bi bi-check-circle"></i> Passwords match
+                        </div>
+                    </div>
+                    <div class="form-group" id="password-feedback">
+                        <!-- Feedback messages will appear here -->
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-outline close-modal" id="cancel-password">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submit-password">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="success-modal-content">
+            <div class="success-icon">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <h2>Password Changed Successfully!</h2>
+            <p>Your password has been updated. You can now use your new password to log in.</p>
+            <button class="btn btn-primary close-success-modal">Done</button>
+        </div>
+    </div>
+
     <!-- API Client Script -->
     <script src="../../../js/api-client.js"></script>
     <script src="script.js"></script>

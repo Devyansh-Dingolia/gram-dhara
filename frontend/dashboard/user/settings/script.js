@@ -63,6 +63,224 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Call the function to load the profile when the page loads
     loadUserProfile();
+
+    // --- NEW: Password Change Modal Logic ---
+    const passwordModal = document.getElementById('password-modal');
+    const successModal = document.getElementById('success-modal');
+    const changePasswordBtn = document.getElementById('change-password-btn');
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+    const closeSuccessModalBtn = document.querySelector('.close-success-modal');
+    const passwordForm = document.getElementById('password-change-form');
+    const oldPasswordInput = document.getElementById('old-password');
+    const newPasswordInput = document.getElementById('new-password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const submitPasswordBtn = document.getElementById('submit-password');
+    const passwordFeedback = document.getElementById('password-feedback');
+
+    // Requirements elements
+    const reqLength = document.getElementById('req-length');
+    const reqUppercase = document.getElementById('req-uppercase');
+    const reqLowercase = document.getElementById('req-lowercase');
+    const reqNumber = document.getElementById('req-number');
+    const reqMatch = document.getElementById('req-match');
+
+    // Open password modal
+    if (changePasswordBtn) {
+        changePasswordBtn.addEventListener('click', () => {
+            // Reset form and validation states
+            passwordForm.reset();
+            resetValidation();
+            passwordModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        });
+    }
+
+    // Close password modal
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            passwordModal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore background scrolling
+        });
+    });
+
+    // Close success modal
+    if (closeSuccessModalBtn) {
+        closeSuccessModalBtn.addEventListener('click', () => {
+            successModal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore background scrolling
+        });
+    }
+
+    // Password validation
+    if (newPasswordInput) {
+        newPasswordInput.addEventListener('input', validatePassword);
+    }
+
+    if (confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+    }
+
+    // Password form submission
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Disable submit button to prevent multiple submissions
+            submitPasswordBtn.disabled = true;
+            submitPasswordBtn.textContent = 'Processing...';
+            
+            // Final validation check
+            if (!isPasswordValid()) {
+                submitPasswordBtn.disabled = false;
+                submitPasswordBtn.textContent = 'Change Password';
+                showFeedback('Please fix the validation errors before submitting.', 'error');
+                return;
+            }
+            
+            try {
+                // Call the API to change password
+                const response = await window.authAPI.changePassword({
+                    oldPassword: oldPasswordInput.value,
+                    newPassword: newPasswordInput.value
+                });
+                
+                if (response.success) {
+                    // Close password modal and show success modal
+                    passwordModal.classList.remove('active');
+                    successModal.classList.add('active');
+                } else {
+                    // Show error message
+                    showFeedback(response.message || 'Failed to change password. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error changing password:', error);
+                showFeedback('An error occurred while changing your password. Please try again later.', 'error');
+            } finally {
+                // Re-enable the submit button
+                submitPasswordBtn.disabled = false;
+                submitPasswordBtn.textContent = 'Change Password';
+            }
+        });
+    }
+
+    // Password validation functions
+    function validatePassword() {
+        const password = newPasswordInput.value;
+        
+        // Length check
+        if (password.length >= 8) {
+            reqLength.classList.add('valid');
+            reqLength.classList.remove('invalid');
+            reqLength.querySelector('i').classList.remove('bi-x-circle');
+            reqLength.querySelector('i').classList.add('bi-check-circle');
+        } else {
+            reqLength.classList.add('invalid');
+            reqLength.classList.remove('valid');
+            reqLength.querySelector('i').classList.remove('bi-check-circle');
+            reqLength.querySelector('i').classList.add('bi-x-circle');
+        }
+        
+        // Uppercase check
+        if (/[A-Z]/.test(password)) {
+            reqUppercase.classList.add('valid');
+            reqUppercase.classList.remove('invalid');
+            reqUppercase.querySelector('i').classList.remove('bi-x-circle');
+            reqUppercase.querySelector('i').classList.add('bi-check-circle');
+        } else {
+            reqUppercase.classList.add('invalid');
+            reqUppercase.classList.remove('valid');
+            reqUppercase.querySelector('i').classList.remove('bi-check-circle');
+            reqUppercase.querySelector('i').classList.add('bi-x-circle');
+        }
+        
+        // Lowercase check
+        if (/[a-z]/.test(password)) {
+            reqLowercase.classList.add('valid');
+            reqLowercase.classList.remove('invalid');
+            reqLowercase.querySelector('i').classList.remove('bi-x-circle');
+            reqLowercase.querySelector('i').classList.add('bi-check-circle');
+        } else {
+            reqLowercase.classList.add('invalid');
+            reqLowercase.classList.remove('valid');
+            reqLowercase.querySelector('i').classList.remove('bi-check-circle');
+            reqLowercase.querySelector('i').classList.add('bi-x-circle');
+        }
+        
+        // Number check
+        if (/\d/.test(password)) {
+            reqNumber.classList.add('valid');
+            reqNumber.classList.remove('invalid');
+            reqNumber.querySelector('i').classList.remove('bi-x-circle');
+            reqNumber.querySelector('i').classList.add('bi-check-circle');
+        } else {
+            reqNumber.classList.add('invalid');
+            reqNumber.classList.remove('valid');
+            reqNumber.querySelector('i').classList.remove('bi-check-circle');
+            reqNumber.querySelector('i').classList.add('bi-x-circle');
+        }
+        
+        // Check password match if confirm field is not empty
+        if (confirmPasswordInput.value) {
+            validatePasswordMatch();
+        }
+    }
+
+    function validatePasswordMatch() {
+        if (newPasswordInput.value === confirmPasswordInput.value && newPasswordInput.value !== '') {
+            reqMatch.classList.add('valid');
+            reqMatch.classList.remove('invalid');
+            reqMatch.querySelector('i').classList.remove('bi-x-circle');
+            reqMatch.querySelector('i').classList.add('bi-check-circle');
+        } else {
+            reqMatch.classList.add('invalid');
+            reqMatch.classList.remove('valid');
+            reqMatch.querySelector('i').classList.remove('bi-check-circle');
+            reqMatch.querySelector('i').classList.add('bi-x-circle');
+        }
+    }
+
+    function isPasswordValid() {
+        return (
+            newPasswordInput.value.length >= 8 &&
+            /[A-Z]/.test(newPasswordInput.value) &&
+            /[a-z]/.test(newPasswordInput.value) &&
+            /\d/.test(newPasswordInput.value) &&
+            newPasswordInput.value === confirmPasswordInput.value
+        );
+    }
+
+    function resetValidation() {
+        const requirements = [reqLength, reqUppercase, reqLowercase, reqNumber, reqMatch];
+        
+        requirements.forEach(req => {
+            req.classList.remove('valid', 'invalid');
+            req.querySelector('i').classList.remove('bi-x-circle');
+            req.querySelector('i').classList.add('bi-check-circle');
+        });
+        
+        passwordFeedback.innerHTML = '';
+    }
+
+    function showFeedback(message, type) {
+        passwordFeedback.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === passwordModal) {
+            passwordModal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore background scrolling
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && (passwordModal.classList.contains('active') || successModal.classList.contains('active'))) {
+            passwordModal.classList.remove('active');
+            successModal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore background scrolling
+        }
+    });
 });
 
 // Logout function
