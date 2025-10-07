@@ -19,9 +19,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', () => closeNoticeModal());
+    });
+
+    const noticeModal = document.getElementById('notice-detail-modal');
+    if (noticeModal) {
+        noticeModal.addEventListener('click', (e) => {
+            if (e.target === noticeModal) {
+                closeNoticeModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && noticeModal && noticeModal.classList.contains('active')) {
+            closeNoticeModal();
+        }
+    });
+    
     // Initialize notices
     const noticesManager = new NoticesManager();
     noticesManager.init();
+
+    // Load backend notices
+    loadBackendNotices();
 
     // Add logout functionality
     function logout() {
@@ -130,6 +153,136 @@ document.addEventListener('DOMContentLoaded', function () {
     // Check token expiration every hour
     setInterval(checkTokenExpiration, 60 * 60 * 1000);
 });
+
+// --- NEW CODE TO ADD FOR BACKEND NOTICES ---
+function createBackendNoticeCard(notice) {
+    const card = document.createElement('div');
+    card.className = 'notice-card';
+    card.dataset.noticeId = notice._id; // API uses _id
+
+    const header = document.createElement('div');
+    header.className = 'notice-header';
+    const title = document.createElement('h3');
+    title.className = 'notice-title';
+    title.textContent = notice.title;
+    header.appendChild(title);
+    card.appendChild(header);
+
+    const body = document.createElement('div');
+    body.className = 'notice-body';
+    const preview = document.createElement('div');
+    preview.className = 'notice-preview';
+    preview.textContent = notice.content.replace(/<[^>]+>/g, '').substring(0, 150) + '...';
+    body.appendChild(preview);
+    card.appendChild(body);
+
+    const footer = document.createElement('div');
+    footer.className = 'notice-footer';
+    const date = document.createElement('div');
+    date.className = 'notice-date';
+    // Format the date from the API (assuming it's called createdAt)
+    const formattedDate = new Date(notice.createdAt).toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    });
+    date.innerHTML = `<i class="bi bi-calendar3"></i> ${formattedDate}`;
+    footer.appendChild(date);
+    card.appendChild(footer);
+
+    // In this simple version, clicking the card can log to console or do nothing
+    card.addEventListener('click', () => {
+        console.log("Clicked backend notice:", notice);
+        openNoticeModal(notice);
+    });
+
+    return card;
+}
+
+async function loadBackendNotices() {
+    const backendGrid = document.getElementById('backend-notices-grid');
+    if (!backendGrid) {
+        console.error('Backend notices grid not found!');
+        return;
+    }
+
+    try {
+        console.log("Fetching backend notices from the API...");
+        const response = await window.noticeAPI.getAllNotices();
+
+        if (response && response.success && Array.isArray(response.data)) {
+            const notices = response.data;
+            backendGrid.innerHTML = ''; // Clear any placeholders
+
+            if (notices.length === 0) {
+                // If no notices, you can hide the section
+                const backendNoticesContainer = backendGrid.closest('.backend-notices');
+                if (backendNoticesContainer) backendNoticesContainer.style.display = 'none';
+            } else {
+                // If there are notices, create and append a card for each
+                notices.forEach(notice => {
+                    const noticeCard = createBackendNoticeCard(notice);
+                    backendGrid.appendChild(noticeCard);
+                });
+            }
+        } else {
+            console.error('Failed to load backend notices, API response invalid.');
+        }
+    } catch (error) {
+        console.error('Error fetching backend notices:', error);
+    }
+}
+
+// --- NEW MODAL HELPER FUNCTIONS ---
+
+function formatDate(dateString) {
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-IN', options);
+}
+
+function openNoticeModal(notice) {
+    const noticeModal = document.getElementById('notice-detail-modal');
+    if (!noticeModal) return;
+
+    // Set modal content from the notice object
+    document.getElementById('modal-title').textContent = notice.title;
+    document.getElementById('modal-date').innerHTML = `<i class="bi bi-calendar3"></i> ${formatDate(notice.createdAt)}`;
+    document.getElementById('modal-category').textContent = notice.category;
+    document.getElementById('modal-category').className = `notice-category category-${notice.category}`;
+    document.getElementById('modal-content').innerHTML = notice.content;
+
+    // Logic for attachments (assuming API provides a URL)
+    const attachmentsContainer = document.getElementById('modal-attachments');
+    attachmentsContainer.innerHTML = ''; // Clear previous attachments
+    if (notice.attachments && notice.attachments.length > 0) {
+        const attachmentsTitle = document.createElement('h3');
+        attachmentsTitle.textContent = 'Attachments';
+        attachmentsContainer.appendChild(attachmentsTitle);
+        notice.attachments.forEach(file => {
+            const item = document.createElement('a');
+            item.href = file.url; // The link to the file
+            item.target = '_blank'; // Open in a new tab
+            item.className = 'attachment-item';
+            item.innerHTML = `<i class="bi bi-file-earmark-arrow-down attachment-icon"></i> <span class="attachment-name">${file.name || 'Download'}</span>`;
+            attachmentsContainer.appendChild(item);
+        });
+        attachmentsContainer.style.display = 'block';
+    } else {
+        attachmentsContainer.style.display = 'none';
+    }
+
+    // Show the modal
+    noticeModal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeNoticeModal() {
+    const noticeModal = document.getElementById('notice-detail-modal');
+    if (noticeModal) {
+        noticeModal.classList.remove('active');
+    }
+    document.body.style.overflow = ''; // Restore background scrolling
+}
 
 class NoticesManager {
     constructor() {
@@ -275,11 +428,8 @@ class NoticesManager {
     }
 
     async fetchNotices() {
-        // Simulate API call with a delay
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        // In a real application, this would be an API call
-        // For now, we'll use hardcoded notices
         this.notices = [
             {
                 id: 1,

@@ -28,7 +28,7 @@
 .page-header p {
     color: var(--text-light);
     max-width: 600px;
-    margin-top: 15px;
+    margin-top: 15px
 }
 
 /* Notices Control Bar */
@@ -110,14 +110,14 @@
     margin-bottom: 25px;
 }
 
-.pinned-notices, .recent-notices, .notice-archive {
+.pinned-notices, .recent-notices, .notice-archive, .backend-notices {
     background-color: #fff;
     border-radius: var(--border-radius);
     padding: 20px;
     box-shadow: var(--card-shadow);
 }
 
-.pinned-notices h2, .recent-notices h2, .notice-archive h2 {
+.pinned-notices h2, .recent-notices h2, .notice-archive h2, .backend-notices h2 {
     font-size: 1.3rem;
     color: var(--text-dark);
     margin-bottom: 20px;
@@ -126,7 +126,7 @@
     gap: 8px;
 }
 
-.pinned-notices h2 i, .recent-notices h2 i, .notice-archive h2 i {
+.pinned-notices h2 i, .recent-notices h2 i, .notice-archive h2 i, .backend-notices h2 i {
     color: var(--primary-color);
 }
 
