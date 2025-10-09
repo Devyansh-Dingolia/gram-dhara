@@ -890,6 +890,13 @@
     }
 }
 
+@media (max-width: 450px) {
+    .btn-submit {
+        margin: 0;
+        width: 100%;
+    }
+    
+}
 /* Dark Mode Support */
 body.dark .stat-card,
 body.dark .category-list-section,

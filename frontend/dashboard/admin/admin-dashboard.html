@@ -7,7 +7,8 @@
     <title>Admin Dashboard - Gram Dhara</title>
     <link rel="stylesheet" href="admin-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -59,8 +60,13 @@
     </div>
 
     <div class="main-content">
-        <button class="menu-toggle" aria-label="Toggle menu">
-            <span class="hamburger"></span>
+        <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+            <span class="sr-only">Menu</span>
+            <div class="hamburger-icon">
+                <span class="line line-1"></span>
+                <span class="line line-2"></span>
+                <span class="line line-3"></span>
+            </div>
         </button>
         <header>
             <div class="search-container">
@@ -297,8 +303,10 @@
                             <td><span class="priority-badge priority-high" title="High"></span></td>
                             <td>
                                 <div class="action-buttons">
-                                    <button title="View Details" class="view-issue" data-id="WR-2023-001"><i class="fas fa-eye"></i></button>
-                                    <button title="Edit Issue" class="edit-issue" data-id="WR-2023-001"><i class="fas fa-edit"></i></button>
+                                    <button title="View Details" class="view-issue" data-id="WR-2023-001"><i
+                                            class="fas fa-eye"></i></button>
+                                    <button title="Edit Issue" class="edit-issue" data-id="WR-2023-001"><i
+                                            class="fas fa-edit"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -312,8 +320,10 @@
                             <td><span class="priority-badge priority-medium" title="Medium"></span></td>
                             <td>
                                 <div class="action-buttons">
-                                    <button title="View Details" class="view-issue" data-id="WR-2023-002"><i class="fas fa-eye"></i></button>
-                                    <button title="Edit Issue" class="edit-issue" data-id="WR-2023-002"><i class="fas fa-edit"></i></button>
+                                    <button title="View Details" class="view-issue" data-id="WR-2023-002"><i
+                                            class="fas fa-eye"></i></button>
+                                    <button title="Edit Issue" class="edit-issue" data-id="WR-2023-002"><i
+                                            class="fas fa-edit"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -327,8 +337,10 @@
                             <td><span class="priority-badge priority-high" title="High"></span></td>
                             <td>
                                 <div class="action-buttons">
-                                    <button title="View Details" class="view-issue" data-id="WR-2023-003"><i class="fas fa-eye"></i></button>
-                                    <button title="Edit Issue" class="edit-issue" data-id="WR-2023-003"><i class="fas fa-edit"></i></button>
+                                    <button title="View Details" class="view-issue" data-id="WR-2023-003"><i
+                                            class="fas fa-eye"></i></button>
+                                    <button title="Edit Issue" class="edit-issue" data-id="WR-2023-003"><i
+                                            class="fas fa-edit"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -392,7 +404,8 @@
                 <span class="notice-category category-maintenance">Maintenance</span>
             </div>
             <div class="notice-content">
-                <p>There will be a temporary interruption in the water supply on October 25, 2023 from 9:00 AM to 2:00 PM due to essential maintenance work on the main distribution line.</p>
+                <p>There will be a temporary interruption in the water supply on October 25, 2023 from 9:00 AM to 2:00
+                    PM due to essential maintenance work on the main distribution line.</p>
             </div>
             <div class="notice-footer">
                 <div class="notice-meta">
@@ -474,6 +487,7 @@
 
     <script src="../../../js/api-client.js"></script>
     <script src="admin.js"></script>
+    <script src="responsive.js"></script>
 </body>
 
 </html>

@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../admin-style.css">
     <link rel="stylesheet" href="pump-status.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -58,8 +59,13 @@
     </div>
 
     <div class="main-content">
-        <button class="menu-toggle" id="menu-toggle">
-            <span class="hamburger"></span>
+        <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+            <span class="sr-only">Menu</span>
+            <div class="hamburger-icon">
+                <span class="line line-1"></span>
+                <span class="line line-2"></span>
+                <span class="line line-3"></span>
+            </div>
         </button>
         <header>
             <div class="search-container">
@@ -381,7 +387,8 @@
                         <button class="pagination-btn" disabled>
                             <i class="fas fa-chevron-left"></i> Previous
                         </button>
-                        <span class="pagination-info">Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+                        <span class="pagination-info">Page <span id="current-page">1</span> of <span
+                                id="total-pages">1</span></span>
                         <button class="pagination-btn" disabled>
                             Next <i class="fas fa-chevron-right"></i>
                         </button>
@@ -440,7 +447,7 @@
                                 <h3>Pump Information</h3>
                                 <span id="modal-pump-id" class="pump-id">P001</span>
                             </div>
-                            
+
                             <div class="info-grid">
                                 <div class="info-item">
                                     <span class="info-label">Status</span>
@@ -467,7 +474,7 @@
                                     <span id="modal-pump-operator" class="info-value">Rajesh Kumar</span>
                                 </div>
                             </div>
-                            
+
                             <div class="pump-specs">
                                 <h3>Technical Specifications</h3>
                                 <div class="specs-grid">
@@ -498,7 +505,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="pump-data-panel">
                             <div class="current-readings">
                                 <h3>Current Readings</h3>
@@ -559,7 +566,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="pump-controls">
                                 <h3>Remote Controls</h3>
                                 <div class="controls-grid">
@@ -577,7 +584,7 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="maintenance-log">
                                 <h3>Recent Maintenance Log</h3>
                                 <div class="log-list">
@@ -585,7 +592,8 @@
                                         <div class="log-date">15 Sept 2023</div>
                                         <div class="log-details">
                                             <span class="log-title">Regular Maintenance</span>
-                                            <span class="log-description">Checked bearings, replaced seals, cleaned impeller</span>
+                                            <span class="log-description">Checked bearings, replaced seals, cleaned
+                                                impeller</span>
                                             <span class="log-technician">Technician: Rahul Sharma</span>
                                         </div>
                                     </div>
@@ -593,7 +601,8 @@
                                         <div class="log-date">20 Jun 2023</div>
                                         <div class="log-details">
                                             <span class="log-title">Fault Repair</span>
-                                            <span class="log-description">Replaced worn out bearings and fixed electrical issue</span>
+                                            <span class="log-description">Replaced worn out bearings and fixed
+                                                electrical issue</span>
                                             <span class="log-technician">Technician: Amit Patel</span>
                                         </div>
                                     </div>
@@ -601,7 +610,8 @@
                                         <div class="log-date">15 Mar 2023</div>
                                         <div class="log-details">
                                             <span class="log-title">Regular Maintenance</span>
-                                            <span class="log-description">Performed routine inspection and lubrication</span>
+                                            <span class="log-description">Performed routine inspection and
+                                                lubrication</span>
                                             <span class="log-technician">Technician: Rahul Sharma</span>
                                         </div>
                                     </div>
@@ -624,6 +634,7 @@
 
     <script src="../../../js/api-client.js"></script>
     <script src="pump-status.js"></script>
+    <script src="../responsive.js"></script>
 </body>
 
 </html>

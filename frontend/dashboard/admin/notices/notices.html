@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../admin-style.css">
     <link rel="stylesheet" href="notices.css">
 </head>
@@ -57,8 +58,13 @@
     </div>
 
     <div class="main-content">
-        <button class="menu-toggle" id="menu-toggle">
-            <span class="hamburger"></span>
+        <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+            <span class="sr-only">Menu</span>
+            <div class="hamburger-icon">
+                <span class="line line-1"></span>
+                <span class="line line-2"></span>
+                <span class="line line-3"></span>
+            </div>
         </button>
         <header>
             <div class="search-container">
@@ -143,7 +149,8 @@
                 <button class="pagination-btn" id="prev-page" disabled>
                     <i class="fas fa-chevron-left"></i> Previous
                 </button>
-                <span class="pagination-info">Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+                <span class="pagination-info">Page <span id="current-page">1</span> of <span
+                        id="total-pages">1</span></span>
                 <button class="pagination-btn" id="next-page" disabled>
                     Next <i class="fas fa-chevron-right"></i>
                 </button>
@@ -192,7 +199,8 @@
                     </div>
                     <div class="form-group">
                         <label for="edit-notice-content">Content</label>
-                        <textarea id="edit-notice-content" placeholder="Enter notice content" rows="6" required></textarea>
+                        <textarea id="edit-notice-content" placeholder="Enter notice content" rows="6"
+                            required></textarea>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn-submit">Update Notice</button>
@@ -224,6 +232,7 @@
 
     <script src="../../../js/api-client.js"></script>
     <script src="notices.js"></script>
+    <script src="../responsive.js"></script>
 </body>
 
 </html>

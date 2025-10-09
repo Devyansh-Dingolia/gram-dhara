@@ -102,6 +102,99 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* For screen reader accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* The main button container */
+.mobile-nav-toggle {
+    /* Positioning */
+    position: fixed;
+    /* Or 'absolute' depending on your layout */
+    top: 20px;
+    left: 20px;
+    z-index: 200;
+    /* Box Model & Appearance */
+    width: 44px;
+    /* A good size for touch targets */
+    height: 44px;
+    padding: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+
+    /* Flexbox for easy centering of the icon inside */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container for the three lines to help with alignment */
+.hamburger-icon {
+    position: relative;
+    width: 24px;
+    height: 16px;
+}
+
+/* Styling for each line of the hamburger */
+.hamburger-icon .line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #2979ff;
+    /* Change this color to match your design */
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger-icon .line-1 {
+    top: 0;
+}
+
+.hamburger-icon .line-2 {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.hamburger-icon .line-3 {
+    bottom: 0;
+}
+
+/* --- ACTIVE 'X' STATE ANIMATION --- */
+/* When the button has the 'aria-expanded="true"' attribute */
+
+.mobile-nav-toggle[aria-expanded="true"] .line-1 {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.mobile-nav-toggle[aria-expanded="true"] .line-2 {
+    opacity: 0;
+}
+
+.mobile-nav-toggle[aria-expanded="true"] .line-3 {
+    bottom: 50%;
+    transform: translateY(50%) rotate(-45deg);
+}
+
+/* Helper Classes */
+.mr-2 {
+    margin-right: 8px;
+}
+
+/* Main Content */
 .main-content {
     flex: 1;
     margin-left: 250px;
@@ -1132,4 +1225,148 @@ body.dark .toast {
 
 .resolution-stats {
     margin-top: 20px;
+}
+
+/* =================================================================== */
+/* --- ANALYTICS PAGE: MOBILE STYLES (450px and smaller) --- */
+/* =================================================================== */
+
+@media (max-width: 450px) {
+    .sidebar {
+        /* Hide the sidebar off-screen to the left */
+        transform: translateX(-100%);
+        box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar.active {
+        /* On click, slide it into view */
+        transform: translateX(0);
+        width: var(--sidebar-width);
+        /* Restore full width when open */
+    }
+
+    /* When the sidebar is active, show the text again */
+    .sidebar.active .logo-container h2,
+    .sidebar.active .nav-item span {
+        display: block;
+    }
+
+    body {
+        display: block;
+        width: 100%;
+    }
+
+    header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .logo-container {
+        margin-top: 50px;
+    }
+
+    .admin-info {
+        order: 1;
+        /* This places it first, above the search */
+        flex-grow: 1;
+        justify-content: flex-end;
+
+    }
+
+    .search-container {
+        width: 100%;
+        order: 2;
+        /* This places it second, below the profile */
+    }
+
+    .main-content {
+        margin-left: 0;
+        /* Main content takes full width */
+        max-width: 100vw;
+    }
+
+    /* 1. Page Header Adjustments */
+    .page-header {
+        flex-direction: column;
+        /* Stack title and buttons vertically */
+        align-items: flex-start;
+        /* Align everything to the left */
+    }
+
+    .page-header-content h1 {
+        font-size: 1.5rem;
+        /* Slightly smaller title for small screens */
+    }
+
+    .page-header-actions {
+        width: 100%;
+        /* Make action buttons take the full width */
+        flex-direction: column;
+        /* Stack buttons if they don't fit side-by-side */
+        align-items: stretch;
+        /* Make buttons equal width */
+    }
+
+    .btn-generate,
+    .date-range-select {
+        text-align: center;
+        /* Center text inside buttons */
+        justify-content: center;
+    }
+
+    /* 2. Stat Cards: Force a single column */
+    .stat-cards-container {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+        /* Make the large numbers a bit smaller */
+    }
+
+    /* 3. Analytics Grids: Stack all chart columns */
+    .analytics-grid {
+        grid-template-columns: 1fr;
+        /* Force single-column layout for charts */
+    }
+
+    .analytics-section:nth-child(3) .analytics-grid,
+    .analytics-section:nth-child(4) .analytics-grid {
+        grid-template-columns: 1fr;
+        /* Ensure override for specific sections */
+    }
+
+    /* 4. Chart Heights: Reduce height to fit on small screens */
+    .chart-card-body,
+    .analytics-section:nth-child(3) .chart-card-body,
+    .analytics-section:nth-child(4) .chart-card-body {
+        height: 280px;
+        /* Reduce chart height for better visibility */
+    }
+
+    .section-header h2 {
+        font-size: 1.1rem;
+    }
+
+    /* 5. Action Items: Stack content for better readability */
+    .action-item {
+        flex-direction: column;
+        /* Stack the icon and content vertically */
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .action-buttons {
+        width: 100%;
+    }
+
+    .btn-action {
+        flex-grow: 1;
+        /* Make buttons share the width nicely */
+        text-align: center;
+        justify-content: center;
+    }
 }
