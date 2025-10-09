@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pump Status Management - Gram Dhara Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../admin-style.css">
+    <link rel="stylesheet" href="pump-status.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="logo-container">
+            <img src="../../../images/fab-icon.png" alt="Gram Dhara Logo" class="logo">
+            <h2>Gram Dhara</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="../admin-dashboard.html" class="nav-item">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            <a href="../complaints/complaints.html" class="nav-item">
+                <i class="fas fa-tasks"></i> Manage Reports
+            </a>
+            <a href="../departments/departments.html" class="nav-item">
+                <i class="fas fa-building"></i> Departments
+            </a>
+            <a href="../categories/categories.html" class="nav-item">
+                <i class="fas fa-list"></i> Categories
+            </a>
+            <a href="../notices/notices.html" class="nav-item">
+                <i class="fas fa-bullhorn"></i> Notices
+            </a>
+            <a href="pump-status.html" class="nav-item active">
+                <i class="fas fa-tint"></i> Pump Status
+            </a>
+            <a href="../users/users.html" class="nav-item">
+                <i class="fas fa-users"></i> Manage Users
+            </a>
+            <a href="../analytics/analytics.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+            <a href="../settings/settings.html" class="nav-item">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+            <a href="../../../index.html" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <p>&copy; 2025 Gram Dhara</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <button class="menu-toggle" id="menu-toggle">
+            <span class="hamburger"></span>
+        </button>
+        <header>
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search pumps..." class="search-input">
+            </div>
+            <div class="admin-profile">
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
+                </div>
+                <div class="admin-info">
+                    <span>Water Admin</span>
+                    <img src="../../../images/avatar.png" alt="Admin Avatar" class="admin-avatar">
+                </div>
+            </div>
+        </header>
+
+        <section class="page-header">
+            <div class="page-header-content">
+                <h1>Pump Status Management</h1>
+                <p>Monitor and control village water pumps, track performance, and manage maintenance schedules</p>
+            </div>
+            <div class="page-header-actions">
+                <button class="btn-schedule-maintenance">
+                    <i class="fas fa-tools"></i> Schedule Maintenance
+                </button>
+                <button class="btn-add-pump">
+                    <i class="fas fa-plus"></i> Add New Pump
+                </button>
+            </div>
+        </section>
+
+        <!-- Pump Overview Section -->
+        <section class="pump-overview-section">
+            <div class="pump-overview-grid">
+                <div class="pump-status-card active">
+                    <div class="status-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="status-details">
+                        <h3>Active Pumps</h3>
+                        <div class="status-value">5</div>
+                    </div>
+                </div>
+                <div class="pump-status-card warning">
+                    <div class="status-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="status-details">
+                        <h3>Warning Status</h3>
+                        <div class="status-value">2</div>
+                    </div>
+                </div>
+                <div class="pump-status-card inactive">
+                    <div class="status-icon">
+                        <i class="fas fa-power-off"></i>
+                    </div>
+                    <div class="status-details">
+                        <h3>Inactive Pumps</h3>
+                        <div class="status-value">1</div>
+                    </div>
+                </div>
+                <div class="pump-status-card maintenance">
+                    <div class="status-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="status-details">
+                        <h3>Under Maintenance</h3>
+                        <div class="status-value">1</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pumps Table Section -->
+        <section class="pump-management-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-tint"></i> Pump Management</h2>
+                    <div class="card-actions">
+                        <div class="filter-container">
+                            <select class="filter-select">
+                                <option value="all">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="warning">Warning</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="maintenance">Maintenance</option>
+                            </select>
+                            <select class="filter-select">
+                                <option value="all">All Locations</option>
+                                <option value="north">North Village</option>
+                                <option value="south">South Village</option>
+                                <option value="east">East Village</option>
+                                <option value="west">West Village</option>
+                                <option value="central">Central Village</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Pump ID</th>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                    <th>Flow Rate</th>
+                                    <th>Power Usage</th>
+                                    <th>Last Maintenance</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="pump-id">P001</span></td>
+                                    <td>Main Village Pump</td>
+                                    <td>Central Village</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>82.3 L/min</td>
+                                    <td>4.2 kW</td>
+                                    <td>15 Sept 2023</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn control-btn" title="Control Panel">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                            <button class="action-btn edit-btn" title="Edit Pump">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pump-id">P002</span></td>
+                                    <td>North Village Pump</td>
+                                    <td>North Village</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>75.8 L/min</td>
+                                    <td>3.8 kW</td>
+                                    <td>22 Sept 2023</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn control-btn" title="Control Panel">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                            <button class="action-btn edit-btn" title="Edit Pump">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pump-id">P003</span></td>
+                                    <td>South Village Pump</td>
+                                    <td>South Village</td>
+                                    <td><span class="status-badge warning">Warning</span></td>
+                                    <td>62.4 L/min</td>
+                                    <td>5.1 kW</td>
+                                    <td>08 Sept 2023</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn control-btn" title="Control Panel">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                            <button class="action-btn edit-btn" title="Edit Pump">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pump-id">P004</span></td>
+                                    <td>East Village Pump</td>
+                                    <td>East Village</td>
+                                    <td><span class="status-badge maintenance">Maintenance</span></td>
+                                    <td>0.0 L/min</td>
+                                    <td>0.0 kW</td>
+                                    <td>05 Oct 2023</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn control-btn" title="Control Panel">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                            <button class="action-btn edit-btn" title="Edit Pump">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pump-id">P005</span></td>
+                                    <td>West Village Pump</td>
+                                    <td>West Village</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>78.2 L/min</td>
+                                    <td>4.0 kW</td>
+                                    <td>20 Sept 2023</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn control-btn" title="Control Panel">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                            <button class="action-btn edit-btn" title="Edit Pump">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pump-id">P006</span></td>
+                                    <td>Agricultural Zone Pump</td>
+                                    <td>East Village</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>85.6 L/min</td>
+                                    <td>4.5 kW</td>
+                                    <td>18 Sept 2023</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn control-btn" title="Control Panel">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                            <button class="action-btn edit-btn" title="Edit Pump">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pump-id">P007</span></td>
+                                    <td>Market Area Pump</td>
+                                    <td>Central Village</td>
+                                    <td><span class="status-badge inactive">Inactive</span></td>
+                                    <td>0.0 L/min</td>
+                                    <td>0.0 kW</td>
+                                    <td>01 Sept 2023</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn control-btn" title="Control Panel">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                            <button class="action-btn edit-btn" title="Edit Pump">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pump-id">P008</span></td>
+                                    <td>School Zone Pump</td>
+                                    <td>North Village</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>74.3 L/min</td>
+                                    <td>3.9 kW</td>
+                                    <td>25 Sept 2023</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn control-btn" title="Control Panel">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                            <button class="action-btn edit-btn" title="Edit Pump">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pump-id">P009</span></td>
+                                    <td>Residential Area Pump</td>
+                                    <td>South Village</td>
+                                    <td><span class="status-badge warning">Warning</span></td>
+                                    <td>68.7 L/min</td>
+                                    <td>4.8 kW</td>
+                                    <td>12 Sept 2023</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn control-btn" title="Control Panel">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                            <button class="action-btn edit-btn" title="Edit Pump">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                        <button class="pagination-btn" disabled>
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <span class="pagination-info">Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+                        <button class="pagination-btn" disabled>
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Analytics Section -->
+        <section class="performance-analytics-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-line"></i> Performance Analytics</h2>
+                    <div class="card-actions">
+                        <div class="filter-container">
+                            <button class="btn-export">
+                                <i class="fas fa-file-export"></i> Export Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="charts-grid">
+                        <div class="chart-container flow-chart">
+                            <h3>Water Flow Rate</h3>
+                            <canvas id="flowRateChart"></canvas>
+                        </div>
+                        <div class="chart-container energy-chart">
+                            <h3>Energy Consumption</h3>
+                            <canvas id="energyConsumptionChart"></canvas>
+                        </div>
+                        <div class="chart-container efficiency-chart">
+                            <h3>Pump Efficiency</h3>
+                            <canvas id="pumpEfficiencyChart"></canvas>
+                        </div>
+                        <div class="chart-container maintenance-chart">
+                            <h3>Maintenance Schedule</h3>
+                            <canvas id="maintenanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pump Detail Modal -->
+        <div class="modal" id="pump-detail-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-tint"></i> <span id="modal-pump-name">Main Village Pump</span></h2>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="pump-detail-grid">
+                        <div class="pump-info-panel">
+                            <div class="pump-detail-header">
+                                <h3>Pump Information</h3>
+                                <span id="modal-pump-id" class="pump-id">P001</span>
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">Status</span>
+                                    <span id="modal-pump-status" class="info-value status-badge active">Active</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Location</span>
+                                    <span id="modal-pump-location" class="info-value">Central Village</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Installation Date</span>
+                                    <span id="modal-pump-install-date" class="info-value">15 Jan 2022</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Last Maintenance</span>
+                                    <span id="modal-pump-last-maintenance" class="info-value">15 Sept 2023</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Next Maintenance</span>
+                                    <span id="modal-pump-next-maintenance" class="info-value">15 Dec 2023</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Operator</span>
+                                    <span id="modal-pump-operator" class="info-value">Rajesh Kumar</span>
+                                </div>
+                            </div>
+                            
+                            <div class="pump-specs">
+                                <h3>Technical Specifications</h3>
+                                <div class="specs-grid">
+                                    <div class="specs-item">
+                                        <span class="specs-label">Model</span>
+                                        <span id="modal-pump-model" class="specs-value">XR-5000</span>
+                                    </div>
+                                    <div class="specs-item">
+                                        <span class="specs-label">Manufacturer</span>
+                                        <span id="modal-pump-manufacturer" class="specs-value">Kirloskar Pumps</span>
+                                    </div>
+                                    <div class="specs-item">
+                                        <span class="specs-label">Motor Power</span>
+                                        <span id="modal-pump-motor-power" class="specs-value">5.5 kW</span>
+                                    </div>
+                                    <div class="specs-item">
+                                        <span class="specs-label">Max Flow Rate</span>
+                                        <span id="modal-pump-max-flow" class="specs-value">95 L/min</span>
+                                    </div>
+                                    <div class="specs-item">
+                                        <span class="specs-label">Max Head</span>
+                                        <span id="modal-pump-max-head" class="specs-value">45 m</span>
+                                    </div>
+                                    <div class="specs-item">
+                                        <span class="specs-label">Voltage</span>
+                                        <span id="modal-pump-voltage" class="specs-value">415V, 3-Phase</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pump-data-panel">
+                            <div class="current-readings">
+                                <h3>Current Readings</h3>
+                                <div class="readings-grid">
+                                    <div class="reading-item">
+                                        <div class="reading-icon flow-icon">
+                                            <i class="fas fa-tint"></i>
+                                        </div>
+                                        <div class="reading-details">
+                                            <span class="reading-label">Flow Rate</span>
+                                            <span id="modal-pump-flow-rate" class="reading-value">82.3 L/min</span>
+                                        </div>
+                                    </div>
+                                    <div class="reading-item">
+                                        <div class="reading-icon power-icon">
+                                            <i class="fas fa-bolt"></i>
+                                        </div>
+                                        <div class="reading-details">
+                                            <span class="reading-label">Power Usage</span>
+                                            <span id="modal-pump-power-usage" class="reading-value">4.2 kW</span>
+                                        </div>
+                                    </div>
+                                    <div class="reading-item">
+                                        <div class="reading-icon pressure-icon">
+                                            <i class="fas fa-compress-arrows-alt"></i>
+                                        </div>
+                                        <div class="reading-details">
+                                            <span class="reading-label">Pressure</span>
+                                            <span id="modal-pump-pressure" class="reading-value">3.8 bar</span>
+                                        </div>
+                                    </div>
+                                    <div class="reading-item">
+                                        <div class="reading-icon temp-icon">
+                                            <i class="fas fa-thermometer-half"></i>
+                                        </div>
+                                        <div class="reading-details">
+                                            <span class="reading-label">Temperature</span>
+                                            <span id="modal-pump-temperature" class="reading-value">38°C</span>
+                                        </div>
+                                    </div>
+                                    <div class="reading-item">
+                                        <div class="reading-icon vibration-icon">
+                                            <i class="fas fa-wave-square"></i>
+                                        </div>
+                                        <div class="reading-details">
+                                            <span class="reading-label">Vibration</span>
+                                            <span id="modal-pump-vibration" class="reading-value">2.4 mm/s</span>
+                                        </div>
+                                    </div>
+                                    <div class="reading-item">
+                                        <div class="reading-icon runtime-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="reading-details">
+                                            <span class="reading-label">Runtime Today</span>
+                                            <span id="modal-pump-runtime" class="reading-value">12.5 hrs</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="pump-controls">
+                                <h3>Remote Controls</h3>
+                                <div class="controls-grid">
+                                    <button class="control-button start-btn">
+                                        <i class="fas fa-play"></i> Start Pump
+                                    </button>
+                                    <button class="control-button stop-btn">
+                                        <i class="fas fa-stop"></i> Stop Pump
+                                    </button>
+                                    <button class="control-button reset-btn">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                    <button class="control-button schedule-btn">
+                                        <i class="fas fa-calendar-alt"></i> Schedule
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="maintenance-log">
+                                <h3>Recent Maintenance Log</h3>
+                                <div class="log-list">
+                                    <div class="log-item">
+                                        <div class="log-date">15 Sept 2023</div>
+                                        <div class="log-details">
+                                            <span class="log-title">Regular Maintenance</span>
+                                            <span class="log-description">Checked bearings, replaced seals, cleaned impeller</span>
+                                            <span class="log-technician">Technician: Rahul Sharma</span>
+                                        </div>
+                                    </div>
+                                    <div class="log-item">
+                                        <div class="log-date">20 Jun 2023</div>
+                                        <div class="log-details">
+                                            <span class="log-title">Fault Repair</span>
+                                            <span class="log-description">Replaced worn out bearings and fixed electrical issue</span>
+                                            <span class="log-technician">Technician: Amit Patel</span>
+                                        </div>
+                                    </div>
+                                    <div class="log-item">
+                                        <div class="log-date">15 Mar 2023</div>
+                                        <div class="log-details">
+                                            <span class="log-title">Regular Maintenance</span>
+                                            <span class="log-description">Performed routine inspection and lubrication</span>
+                                            <span class="log-technician">Technician: Rahul Sharma</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-maintenance">Schedule Maintenance</button>
+                    <button class="btn-generate-report">Generate Report</button>
+                    <button class="btn-close-modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications Container -->
+        <div class="toast-container" id="toast-container"></div>
+    </div>
+
+    <script src="../../../js/api-client.js"></script>
+    <script src="pump-status.js"></script>
+</body>
+
+</html>
