@@ -1280,64 +1280,92 @@ body {
 }
 
 /* Menu Toggle for Mobile */
-.menu-toggle {
-    display: none;
+/* For screen reader accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* The main button container */
+.mobile-nav-toggle {
+    /* Positioning */
     position: fixed;
+    /* Or 'absolute' depending on your layout */
     top: 20px;
     left: 20px;
     z-index: 200;
-    background: white;
+    /* Box Model & Appearance */
+    width: 44px;
+    /* A good size for touch targets */
+    height: 44px;
+    padding: 10px;
+    background-color: white;
     border: none;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s;
+    cursor: pointer;
+
+    /* Flexbox for easy centering of the icon inside */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.menu-toggle:hover {
-    background-color: var(--primary-light);
-}
-
-.hamburger {
+/* Container for the three lines to help with alignment */
+.hamburger-icon {
     position: relative;
-    display: block;
-    width: 20px;
-    height: 2px;
-    background-color: var(--primary-color);
-    margin: 0 auto;
-    transition: all 0.3s;
+    width: 24px;
+    height: 16px;
 }
 
-.hamburger::before,
-.hamburger::after {
-    content: '';
+/* Styling for each line of the hamburger */
+.hamburger-icon .line {
     position: absolute;
-    width: 20px;
+    left: 0;
+    width: 100%;
     height: 2px;
-    background-color: var(--primary-color);
-    transition: all 0.3s;
+    background-color: #2979ff;
+    /* Change this color to match your design */
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
 }
 
-.hamburger::before {
-    transform: translateY(-6px);
+.hamburger-icon .line-1 {
+    top: 0;
 }
 
-.hamburger::after {
-    transform: translateY(6px);
+.hamburger-icon .line-2 {
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-body.sidebar-open .hamburger {
-    background-color: transparent;
+.hamburger-icon .line-3 {
+    bottom: 0;
 }
 
-body.sidebar-open .hamburger::before {
-    transform: rotate(45deg);
+
+/* --- ACTIVE 'X' STATE ANIMATION --- */
+/* When the button has the 'aria-expanded="true"' attribute */
+
+.mobile-nav-toggle[aria-expanded="true"] .line-1 {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
 }
 
-body.sidebar-open .hamburger::after {
-    transform: rotate(-45deg);
+.mobile-nav-toggle[aria-expanded="true"] .line-2 {
+    opacity: 0;
+}
+
+.mobile-nav-toggle[aria-expanded="true"] .line-3 {
+    bottom: 50%;
+    transform: translateY(50%) rotate(-45deg);
 }
 
 /* Helper Classes */
@@ -1346,100 +1374,100 @@ body.sidebar-open .hamburger::after {
 }
 
 /* Responsive Design */
-@media screen and (max-width: 992px) {
+@media (max-width: 450px) {
+    .dashboard-header {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
 
-    .menu-toggle {
-        display: block;
-    }
-
-    .sidebar {
-        transform: translateX(-100%);
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-        z-index: 300;
-    }
-
-    .sidebar.active {
-        transform: translateX(0);
-    }
-
-    .main-content {
-        margin-left: 0;
-        padding-top: 80px;
-    }
-
-    body.sidebar-open::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
+    .search-container {
         width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 250;
+        order: 1;
+    }
+
+    .user-menu {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .complaint-meta {
+        flex-direction: column;
+        gap: 5px;
     }
 }
 
-@media screen and (max-width: 768px) {
-    .stats-cards {
-        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+@media (max-width: 450px) {
+
+    /* Corrected Sidebar - Mobile Off-canvas */
+    .sidebar {
+        position: fixed;
+        left: -300px;
+        top: 0;
+        height: 100%;
+        width: 250px;
+        /* Explicitly set the width */
+        z-index: 150;
+        transition: left 0.3s ease-in-out;
+        box-shadow: 20px 0 20px rgba(0, 0, 0, 0.3);
+        /* Add some top padding */
     }
 
-    .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
+    .sidebar.active {
+        left: 0;
     }
 
-    .search-container {
-        max-width: 100%;
+    .mobile-nav-toggle {
+        display: flex;
+    }
+
+    .sidebar-header {
+        padding-left: 80px;
+        height: 80px;
+    }
+
+    /* Main Content Area */
+    .main-content {
+        padding: 20px 15px;
+        overflow-x: hidden;
+        /* Prevents horizontal scrolling from content overflow */
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .dashboard-container.sidebar-open .sidebar {
+        transform: translateX(0);
+    }
+
+    .sidebar-toggle {
+        display: block;
     }
 
     .welcome-section {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
     }
 
-    .quality-metrics,
-    .actions-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .emergency-content {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .user-menu {
+    .date-time {
+        text-align: left;
+        margin-top: 10px;
         width: 100%;
-        justify-content: space-between;
     }
 
-    .user-profile img {
-        width: 35px;
-        height: 35px;
-    }
-
-    .user-info h4 {
-        font-size: 0.8rem;
-    }
-
-    .user-info p {
-        font-size: 0.7rem;
-    }
-
-    .card-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-
-    .maintenance-status {
-        display: none;
+    .stats-cards {
+        grid-template-columns: 1fr;
     }
 }
 

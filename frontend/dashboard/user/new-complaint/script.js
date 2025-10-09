@@ -508,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function () {
         audioInput.value = null;
         recordBtn.disabled = false;
         audioInput.disabled = false;
-        recordingStatus.textContent = "Click record to start or select a file.";
+        recordingStatus.textContent = "Click record to start";
         removeAudioBtn.style.display = 'none';
     }
 

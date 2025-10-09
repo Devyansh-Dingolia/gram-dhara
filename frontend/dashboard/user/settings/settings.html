@@ -35,16 +35,20 @@
                                 Report</span></a>
                     </li>
                     <li>
-                        <a href="../my-reports/my-reports.html"><i class="bi bi-list-check"></i> <span>My Reports</span></a>
+                        <a href="../my-reports/my-reports.html"><i class="bi bi-list-check"></i> <span>My
+                                Reports</span></a>
                     </li>
                     <li>
-                        <a href="../water-quality/water-quality.html"><i class="bi bi-droplet"></i> <span>Water Quality</span></a>
+                        <a href="../water-quality/water-quality.html"><i class="bi bi-droplet"></i> <span>Water
+                                Quality</span></a>
                     </li>
                     <li>
-                        <a href="../pump-status/pump-status.html"><i class="bi bi-activity"></i> <span>Pump Status</span></a>
+                        <a href="../pump-status/pump-status.html"><i class="bi bi-activity"></i> <span>Pump
+                                Status</span></a>
                     </li>
                     <li>
-                        <a href="../notifications/notifications.html"><i class="bi bi-bell"></i> <span>Notifications</span></a>
+                        <a href="../notifications/notifications.html"><i class="bi bi-bell"></i>
+                            <span>Notifications</span></a>
                     </li>
                     <li class="active">
                         <a href="settings.html"><i class="bi bi-gear"></i> <span>Settings</span></a>
@@ -64,8 +68,13 @@
 
         <!-- Main Content Area -->
         <main class="main-content">
-            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
-                <span class="hamburger"></span>
+            <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+                <span class="sr-only">Menu</span>
+                <div class="hamburger-icon">
+                    <span class="line line-1"></span>
+                    <span class="line line-2"></span>
+                    <span class="line line-3"></span>
+                </div>
             </button>
 
             <!-- Top Header with user info and search -->
@@ -97,49 +106,48 @@
                     <div class="profile-avatar-container">
                         <img src="https://img.icons8.com/?size=100&id=9q3GMpxNIMjC&format=png&color=000000"
                             alt="User Avatar" id="profile-avatar">
-                    <div class="profile-header-info">
-                        <h2 id="profile-name-header">Loading...</h2>
-                        <p id="profile-role" class="role-badge">Loading...</p>
+                        <div class="profile-header-info">
+                            <h2 id="profile-name-header">Loading...</h2>
+                            <p id="profile-role" class="role-badge">Loading...</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="profile-card-body">
-                    <form id="profile-details-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="profile-name">Full Name</label>
-                                <input type="text" id="profile-name" value="Loading..." disabled>
+                    <div class="profile-card-body">
+                        <form id="profile-details-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profile-name">Full Name</label>
+                                    <input type="text" id="profile-name" value="Loading..." disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-username">Username</label>
+                                    <input type="text" id="profile-username" value="Loading..." disabled>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="profile-username">Username</label>
-                                <input type="text" id="profile-username" value="Loading..." disabled>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profile-email">Email Address</label>
+                                    <input type="email" id="profile-email" value="Loading..." disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-phone">Phone Number</label>
+                                    <input type="text" id="profile-phone" value="Loading..." disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="profile-email">Email Address</label>
-                                <input type="email" id="profile-email" value="Loading..." disabled>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profile-userid">User ID</label>
+                                    <input type="text" id="profile-userid" value="Loading..." disabled>
+                                </div>
+                                <div class="form-group password-button-container">
+                                    <button type="button" id="change-password-btn" class="btn btn-primary">
+                                        <i class="bi bi-key"></i> Change Password
+                                    </button>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="profile-phone">Phone Number</label>
-                                <input type="text" id="profile-phone" value="Loading..." disabled>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="profile-userid">User ID</label>
-                                <input type="text" id="profile-userid" value="Loading..." disabled>
-                            </div>
-                            <div class="form-group password-button-container">
-                                <button type="button" id="change-password-btn" class="btn btn-primary">
-                                    <i class="bi bi-key"></i> Change Password
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                        </form>
+                    </div>
             </section>
-
         </main>
     </div>
 
@@ -193,7 +201,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Success Modal -->
     <div id="success-modal" class="modal-overlay">
         <div class="success-modal-content">
@@ -209,6 +217,7 @@
     <!-- API Client Script -->
     <script src="../../../js/api-client.js"></script>
     <script src="script.js"></script>
+    <script src="../responsive.js"></script>
 </body>
 
 </html>

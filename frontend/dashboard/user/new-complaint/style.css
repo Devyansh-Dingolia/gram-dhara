@@ -848,12 +848,23 @@
 
     .audio-controls {
         flex-wrap: wrap;
+        flex-direction: column;
     }
 
     .record-btn,
     .stop-btn,
     .remove-audio-btn {
         flex: 1;
+        justify-content: center;
+    }
+
+    #file-upload {
+        font-size: 0;
+    }
+
+    #file-upload::before {
+        content: "Upload Audio";
+        font-size: 1rem;
     }
 }
 

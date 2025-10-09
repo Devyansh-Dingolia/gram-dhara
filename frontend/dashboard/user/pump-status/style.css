@@ -1365,3 +1365,30 @@ body.dark .btn-alert-action {
     from { opacity: 1; }
     to { opacity: 0; }
 }
+
+@media screen and (max-width: 450px) {
+    .pump-status-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pump-performance {
+        height: 500px;
+    }
+
+    .alert-meta {
+        width: 100%;
+    }
+
+    .efficiency-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .efficiency-chart {
+        padding: 0px;
+        width: 100%;
+    }
+
+    .badge.upcoming, .badge.scheduled, .badge.completed {
+        display:none;
+    }
+}

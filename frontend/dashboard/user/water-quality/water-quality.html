@@ -10,7 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -33,19 +34,23 @@
                         <a href="../notices/notices.html"><i class="bi bi-megaphone"></i> <span>Notices</span></a>
                     </li>
                     <li>
-                        <a href="../new-complaint/new-complaint.html"><i class="bi bi-plus-circle"></i> <span>New Report</span></a>
+                        <a href="../new-complaint/new-complaint.html"><i class="bi bi-plus-circle"></i> <span>New
+                                Report</span></a>
                     </li>
                     <li>
-                        <a href="../my-reports/my-reports.html"><i class="bi bi-list-check"></i> <span>My Reports</span></a>
+                        <a href="../my-reports/my-reports.html"><i class="bi bi-list-check"></i> <span>My
+                                Reports</span></a>
                     </li>
                     <li class="active">
                         <a href="water-quality.html"><i class="bi bi-droplet"></i> <span>Water Quality</span></a>
                     </li>
                     <li>
-                        <a href="../pump-status/pump-status.html"><i class="bi bi-activity"></i> <span>Pump Status</span></a>
+                        <a href="../pump-status/pump-status.html"><i class="bi bi-activity"></i> <span>Pump
+                                Status</span></a>
                     </li>
                     <li>
-                        <a href="../notifications/notifications.html"><i class="bi bi-bell"></i> <span>Notifications</span></a>
+                        <a href="../notifications/notifications.html"><i class="bi bi-bell"></i>
+                            <span>Notifications</span></a>
                     </li>
                     <li>
                         <a href="../settings/settings.html"><i class="bi bi-gear"></i> <span>Settings</span></a>
@@ -65,8 +70,13 @@
 
         <!-- Main Content Area -->
         <main class="main-content">
-            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
-                <span class="hamburger"></span>
+            <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+                <span class="sr-only">Menu</span>
+                <div class="hamburger-icon">
+                    <span class="line line-1"></span>
+                    <span class="line line-2"></span>
+                    <span class="line line-3"></span>
+                </div>
             </button>
 
             <!-- Top Header with user info and search -->
@@ -178,12 +188,13 @@
                             <div class="parameter-status safe">Safe</div>
                         </div>
                         <div class="parameter-value">7.2</div>
-                        
+
                         <!-- Parameter info - this remains above the grid -->
                         <div class="parameter-info">
-                            <p>pH indicates the acidity or alkalinity of water. Safe drinking water should have a pH between 6.5-8.5.</p>
+                            <p>pH indicates the acidity or alkalinity of water. Safe drinking water should have a pH
+                                between 6.5-8.5.</p>
                         </div>
-                        
+
                         <!-- The grid layout with range and chart side by side -->
                         <div class="parameter-data">
                             <div class="parameter-range">
@@ -209,11 +220,12 @@
                             <div class="parameter-status warning">Attention</div>
                         </div>
                         <div class="parameter-value">5.8 <span>NTU</span></div>
-                        
+
                         <div class="parameter-info">
-                            <p>Turbidity measures water clarity. High turbidity can indicate presence of pathogens and reduce disinfection effectiveness.</p>
+                            <p>Turbidity measures water clarity. High turbidity can indicate presence of pathogens and
+                                reduce disinfection effectiveness.</p>
                         </div>
-                        
+
                         <div class="parameter-data">
                             <div class="parameter-range">
                                 <div class="range-bar">
@@ -223,7 +235,7 @@
                                 <div class="range-labels">
                                     <span>0</span>
                                     <span class="range-ideal">Ideal: <5 NTU</span>
-                                    <span>10+</span>
+                                            <span>10+</span>
                                 </div>
                             </div>
                             <div class="parameter-history">
@@ -238,11 +250,12 @@
                             <div class="parameter-status safe">Safe</div>
                         </div>
                         <div class="parameter-value">0.8 <span>mg/L</span></div>
-                        
+
                         <div class="parameter-info">
-                            <p>Residual chlorine protects against bacterial contamination in the distribution system.</p>
+                            <p>Residual chlorine protects against bacterial contamination in the distribution system.
+                            </p>
                         </div>
-                        
+
                         <div class="parameter-data">
                             <div class="parameter-range">
                                 <div class="range-bar">
@@ -267,11 +280,12 @@
                             <div class="parameter-status safe">Safe</div>
                         </div>
                         <div class="parameter-value">345 <span>ppm</span></div>
-                        
+
                         <div class="parameter-info">
-                            <p>TDS represents the total concentration of dissolved substances in water. High levels affect taste and can indicate contamination.</p>
+                            <p>TDS represents the total concentration of dissolved substances in water. High levels
+                                affect taste and can indicate contamination.</p>
                         </div>
-                        
+
                         <div class="parameter-data">
                             <div class="parameter-range">
                                 <div class="range-bar">
@@ -281,7 +295,7 @@
                                 <div class="range-labels">
                                     <span>0</span>
                                     <span class="range-ideal">Ideal: <500 ppm</span>
-                                    <span>1000</span>
+                                            <span>1000</span>
                                 </div>
                             </div>
                             <div class="parameter-history">
@@ -321,7 +335,8 @@
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h3>Collection</h3>
-                            <p>Use clean sterilized bottles. For tap water, let it run for 2-3 minutes before collection.</p>
+                            <p>Use clean sterilized bottles. For tap water, let it run for 2-3 minutes before
+                                collection.</p>
                         </div>
                     </div>
 
@@ -371,13 +386,15 @@
 
             <!-- Footer -->
             <footer class="dashboard-footer">
-                <p>&copy; 2025 Gram Dhara Water Management System | <span class="version">Ministry of Water Resources</span></p>
+                <p>&copy; 2025 Gram Dhara Water Management System | <span class="version">Ministry of Water
+                        Resources</span></p>
             </footer>
         </main>
     </div>
 
     <script src="../../../js/api-client.js"></script>
     <script src="script.js"></script>
+    <script src="../responsive.js"></script>
 </body>
 
 </html>
