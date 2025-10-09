@@ -242,22 +242,3 @@
 .emergency-icon:nth-child(4) {
     animation-delay: 1.5s;
 }
-
-@media (max-width: 768px) {
-    .info-bar {
-        padding-left: 10px;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .main-nav {
-        padding-left: 10px;
-    }
-
-    .trapezoid-logo {
-        position: relative;
-        width: 100%;
-        clip-path: none;
-        height: 80px;
-    }
-}
