@@ -1,4 +1,5 @@
 import { Report } from '../models/report.model.js';
+import { User } from '../models/user.model.js';
 import { ReportAssignment } from '../models/reportAssignment.model.js';
 import { ReportHistory } from '../models/reportHistory.model.js';
 import { Notification } from '../models/notifications.model.js';
@@ -58,7 +59,7 @@ const updateReportStatus = asyncHandler(async (req, res) => {
         reportId: report.reportId,
         message: `Your report status has been updated to "${newStatus}".`,
     });
-    
+
     // Trigger live analytics update
     await generateAnalytics();
 
@@ -111,7 +112,7 @@ const assignReport = asyncHandler(async (req, res) => {
         reportId: report.reportId,
         message: `A new report has been assigned to you.`,
     });
-    
+
     // Trigger live analytics update
     await generateAnalytics();
 
@@ -161,7 +162,7 @@ const resolveReport = asyncHandler(async (req, res) => {
         reportId: report.reportId,
         message: `Your report status has been updated to "resolved".`,
     });
-    
+
     // Trigger live analytics update
     await generateAnalytics();
 
@@ -170,14 +171,21 @@ const resolveReport = asyncHandler(async (req, res) => {
     );
 });
 
-// Placeholder admin controller functions
 const getDashboardStats = asyncHandler(async (req, res) => {
-    // Placeholder implementation
+    // Count all reports
+    const totalReports = await Report.countDocuments();
+
+    // Count reports by status
+    const reportStatuses = await Report.aggregate([
+        { $group: { _id: "$status", count: { $sum: 1 } } }
+    ]);
+
     const stats = {
-        totalReports: 0,
-        pendingReports: 0,
-        resolvedReports: 0,
-        totalUsers: 0
+        totalReports: totalReports,
+        pendingReports: reportStatuses.find(s => s._id === 'pending')?.count || 0,
+        inProgressReports: reportStatuses.find(s => s._id === 'in_progress')?.count || 0,
+        resolvedReports: reportStatuses.find(s => s._id === 'resolved')?.count || 0,
+        totalUsers: await User.countDocuments(),
     };
 
     return res.status(200).json(
@@ -186,8 +194,9 @@ const getDashboardStats = asyncHandler(async (req, res) => {
 });
 
 const getAllUsers = asyncHandler(async (req, res) => {
-    // Placeholder implementation
-    const users = [];
+    const users = await User.find()
+        .select("-password -refreshToken")
+        .sort({ createdAt: -1 });
 
     return res.status(200).json(
         new ApiResponse(200, users, "Users fetched successfully")
@@ -195,16 +204,43 @@ const getAllUsers = asyncHandler(async (req, res) => {
 });
 
 const updateUserRole = asyncHandler(async (req, res) => {
-    // Placeholder implementation
+    const { userId } = req.params;
+    const { newRole } = req.body;
+
+    if (!newRole) {
+        throw new ApiError(400, "New role is required.");
+    }
+
+    // Validate if the newRole is an allowed role if necessary
+
+    const updatedUser = await User.findOneAndUpdate(
+        { userId: userId },
+        { $set: { role: newRole } },
+        { new: true, select: "-password -refreshToken" } // Return the updated document
+    );
+
+    if (!updatedUser) {
+        throw new ApiError(404, "User not found.");
+    }
+
     return res.status(200).json(
-        new ApiResponse(200, {}, "User role updated successfully")
+        new ApiResponse(200, updatedUser, `User role updated to ${newRole} successfully.`)
     );
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
-    // Placeholder implementation
+    const { userId } = req.params;
+
+    const deletedUser = await User.findOneAndDelete({ userId: userId });
+
+    if (!deletedUser) {
+        throw new ApiError(404, "User not found.");
+    }
+
+    // OPTIONAL: Delete related reports, history, and notifications here if required by business logic.
+
     return res.status(200).json(
-        new ApiResponse(200, {}, "User deleted successfully")
+        new ApiResponse(200, { userId: userId }, "User deleted successfully")
     );
 });
 
