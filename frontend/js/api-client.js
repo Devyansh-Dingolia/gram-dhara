@@ -97,6 +97,20 @@ const authAPI = {
             method: 'POST',
             body: JSON.stringify(data),
         });
+    },
+
+    forgotPassword: (data) => {
+        return apiRequest('/api/v1/users/forgot-password', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    },
+
+    resetPassword: (token, data) => {
+        return apiRequest(`/api/v1/users/reset-password/${token}`, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
     }
 };
 
