@@ -1374,6 +1374,12 @@ body {
 }
 
 /* Responsive Design */
+@media screen and (min-width: 451px) {
+    .mobile-nav-toggle {
+        display: none;
+    }
+}
+
 @media (max-width: 450px) {
     .dashboard-header {
         flex-wrap: wrap;

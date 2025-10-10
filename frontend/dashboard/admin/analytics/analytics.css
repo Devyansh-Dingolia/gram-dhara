@@ -1230,6 +1230,11 @@ body.dark .toast {
 /* =================================================================== */
 /* --- ANALYTICS PAGE: MOBILE STYLES (450px and smaller) --- */
 /* =================================================================== */
+@media screen and (min-width: 451px) {
+    .mobile-nav-toggle {
+        display: none;
+    }
+}
 
 @media (max-width: 450px) {
     .sidebar {

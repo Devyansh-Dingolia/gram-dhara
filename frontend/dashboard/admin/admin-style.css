@@ -1066,6 +1066,12 @@ header {
 }
 
 /* Media queries remain mostly the same, but with some adjustments */
+@media screen and (min-width: 451px) {
+    .mobile-nav-toggle {
+        display: none;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .stats-cards {
         grid-template-columns: 1fr;
