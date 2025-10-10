@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings - Gram Dhara</title>
+    <link rel="stylesheet" href="../../admin/admin-style.css">
+    <link rel="stylesheet" href="setting.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo-container">
+            <img src="../../../images/fab-icon.png" alt="Gram Dhara Logo" class="logo">
+            <h2>Gram Dhara</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="../admin-dashboard.html" class="nav-item">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            <a href="../complaints/complaints.html" class="nav-item">
+                <i class="fas fa-tasks"></i> Manage Reports
+            </a>
+            <a href="../departments/departments.html" class="nav-item">
+                <i class="fas fa-building"></i> Departments
+            </a>
+            <a href="../categories/categories.html" class="nav-item">
+                <i class="fas fa-list"></i> Categories
+            </a>
+            <a href="../notices/notices.html" class="nav-item">
+                <i class="fas fa-bullhorn"></i> Notices
+            </a>
+            <a href="../notifications/notifications.html" class="nav-item">
+                <i class="fa-solid fa-bell"></i> Notifications
+            </a>
+            <a href="../users/users.html" class="nav-item">
+                <i class="fas fa-users"></i> Manage Users
+            </a>
+            <a href="../analytics/analytics.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+            <a href="settings.html" class="nav-item active">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+            <a href="../../../index.html" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <p>&copy; 2025 Gram Dhara</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+            <span class="sr-only">Menu</span>
+            <div class="hamburger-icon">
+                <span class="line line-1"></span>
+                <span class="line line-2"></span>
+                <span class="line line-3"></span>
+            </div>
+        </button>
+        <header>
+            <div class="search-container">
+                <i class="bi bi-search"></i>
+                <input type="text" class="search-input" placeholder="Search...">
+            </div>
+            <div class="admin-profile">
+                <div class="notification">
+                    <i class="bi bi-bell"></i>
+                    <div class="notification-count">3</div>
+                </div>
+                <div class="admin-info">
+                    <img src="../../../images/avatar.png" alt="Admin" class="admin-avatar">
+                    <span>Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="welcome-section">
+            <div>
+                <h1>Admin Settings</h1>
+                <p>Manage your profile and security settings</p>
+            </div>
+            <div class="date">
+                <span id="current-date">October 18, 2023</span>
+            </div>
+        </div>
+
+        <!-- Admin Profile Section -->
+        <section class="admin-profile-card">
+            <div class="profile-card-header">
+                <div class="profile-avatar-container">
+                    <img src="https://img.icons8.com/?size=100&id=9q3GMpxNIMjC&format=png&color=000000"
+                        alt="Admin Avatar" id="profile-avatar">
+                    <div class="profile-edit-overlay">
+                        <i class="bi bi-camera"></i>
+                    </div>
+                </div>
+                <div class="profile-header-info">
+                    <h2 id="profile-name-header">Administrator</h2>
+                    <p id="profile-role" class="role-badge admin">System Administrator</p>
+                </div>
+            </div>
+
+            <div class="profile-card-body">
+                <form id="profile-details-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-name">Full Name</label>
+                            <input type="text" id="profile-name" value="Administrator" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-username">Username</label>
+                            <input type="text" id="profile-username" value="admin" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-email">Email Address</label>
+                            <input type="email" id="profile-email" value="admin@gramdhara.gov.in" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-phone">Phone Number</label>
+                            <input type="text" id="profile-phone" value="+91 98765 43210" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-userid">Admin ID</label>
+                            <input type="text" id="profile-userid" value="ADMIN-001" disabled>
+                        </div>
+                        <div class="form-group password-button-container">
+                            <button type="button" id="change-password-btn" class="btn btn-primary">
+                                <i class="bi bi-key"></i> Change Password
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- System Information Section -->
+        <section class="system-info-card">
+            <h3><i class="bi bi-info-circle"></i> System Information</h3>
+            <div class="system-info-grid">
+                <div class="info-item">
+                    <span class="info-label">System Version:</span>
+                    <span class="info-value">1.0.0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Last Login:</span>
+                    <span class="info-value">Today, 09:45 AM</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">IP Address:</span>
+                    <span class="info-value">192.168.1.10</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Server Status:</span>
+                    <span class="info-value status-active">Active</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Database Status:</span>
+                    <span class="info-value status-active">Connected</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Last Backup:</span>
+                    <span class="info-value">Today, 03:00 AM</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Password Change Modal Overlay -->
+    <div id="password-modal" class="modal-overlay">
+        <div class="password-modal-content">
+            <div class="modal-header">
+                <h2><i class="bi bi-shield-lock"></i> Change Admin Password</h2>
+                <button type="button" class="close-modal"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="password-change-form">
+                    <div class="form-group">
+                        <label for="old-password">Current Password</label>
+                        <div class="password-input-container">
+                            <input type="password" id="old-password" placeholder="Enter your current password" required>
+                            <button type="button" class="toggle-password" data-target="old-password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <div class="password-input-container">
+                            <input type="password" id="new-password" placeholder="Enter your new password" required>
+                            <button type="button" class="toggle-password" data-target="new-password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <div class="password-input-container">
+                            <input type="password" id="confirm-password" placeholder="Confirm your new password"
+                                required>
+                            <button type="button" class="toggle-password" data-target="confirm-password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="password-requirements">
+                        <p>Password requirements:</p>
+                        <div class="requirement-item" id="req-length">
+                            <i class="bi bi-x-circle"></i> At least 8 characters
+                        </div>
+                        <div class="requirement-item" id="req-uppercase">
+                            <i class="bi bi-x-circle"></i> At least one uppercase letter
+                        </div>
+                        <div class="requirement-item" id="req-lowercase">
+                            <i class="bi bi-x-circle"></i> At least one lowercase letter
+                        </div>
+                        <div class="requirement-item" id="req-number">
+                            <i class="bi bi-x-circle"></i> At least one number
+                        </div>
+                        <div class="requirement-item" id="req-match">
+                            <i class="bi bi-x-circle"></i> Passwords match
+                        </div>
+                    </div>
+                    <div class="form-group" id="password-feedback">
+                        <!-- Feedback messages will appear here -->
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-outline close-modal" id="cancel-password"></button>
+                        <button type="submit" class="btn btn-primary" id="submit-password" disabled>Change
+                            Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="success-modal-content">
+            <div class="success-icon">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <h2>Password Changed Successfully!</h2>
+            <p>Your administrator password has been updated. Please use your new password the next time you log in.</p>
+            <button class="btn btn-primary close-success-modal">Done</button>
+        </div>
+    </div>
+
+    <script src="../../../js/api-client.js"></script>
+    <script src="settings.js"></script>
+    <script src="../responsive.js"></script>
+</body>
+
+</html>

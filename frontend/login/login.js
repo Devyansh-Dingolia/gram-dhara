@@ -39,8 +39,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (userJson && userJson !== 'undefined') {
                 const user = JSON.parse(userJson);
                 if (user && user.role) {
-                    if (user.role === 'super_admin' || user.role === 'department_admin') {
+                    if (user.role === 'super_admin') {
                         window.location.href = '../dashboard/admin/admin-dashboard.html';
+                    } else if (user.role === 'department_admin') {
+                        window.location.href = '../dashboard/department-admin/admin-dashboard.html';
                     } else {
                         window.location.href = '../dashboard/user/user-dashboard.html';
                     }
@@ -114,8 +116,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                         const user = response.data.user;
                         if (user && user.role) {
                             console.log('Redirecting based on role:', user.role);
-                            if (user.role === 'super_admin' || user.role === 'department_admin') {
+                            if (user.role === 'super_admin') {
                                 window.location.href = '../dashboard/admin/admin-dashboard.html';
+                            } else if (user.role === 'department_admin') {
+                                window.location.href = '../dashboard/department-admin/admin-dashboard.html';
                             } else {
                                 window.location.href = '../dashboard/user/user-dashboard.html';
                             }
