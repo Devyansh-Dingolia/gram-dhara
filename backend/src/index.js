@@ -27,8 +27,8 @@ connectDB()
             console.log(`Login endpoint available at: http://localhost:${PORT}/api/v1/users/login`);
 
             // Schedule the notification task
-            // This cron job will run every 15 minutes
-            cron.schedule('*/15 * * * *', async () => {
+            // This cron job will run every 60 minutes
+            cron.schedule('0 * * * *', async () => {
                 console.log('Running pending report notification task...');
                 try {
                     await sendPendingReportNotifications();

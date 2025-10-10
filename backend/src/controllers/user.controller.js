@@ -235,8 +235,20 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const resetToken = user.getResetPasswordToken();
     await user.save({ validateBeforeSave: false });
 
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/users/reset-password/${resetToken}`;
-    const message = `You are receiving this email because you (or someone else) has requested a password reset. Please click on this link to reset your password: \n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`;
+    const resetUrl = `http://127.0.0.1:5500/reset-password.html?token=${resetToken}`;
+    const message = `<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <h3 style="color: #1d4ed8;">Password Reset Request</h3>
+            <p>You are receiving this email because a password reset was requested for your account on Gram Dhara.</p>
+            <p>Please click the button below to reset your password. The link is valid for 10 minutes.</p>
+            <a href="${resetUrl}" target="_blank" style="display: inline-block; padding: 12px 25px; margin: 20px 0; font-size: 16px; color: #ffffff; background-color: #2563eb; border-radius: 5px; text-decoration: none;">
+                Reset Your Password
+            </a>
+            <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+            <hr style="border: none; border-top: 1px solid #eee;">
+            <p style="font-size: 0.9em; color: #777;">If you're having trouble clicking the button, copy and paste the following URL into your web browser:</p>
+            <p style="font-size: 0.9em; color: #777; word-break: break-all;">${resetUrl}</p>
+        </div>
+    `;
 
     try {
         await sendEmail({
