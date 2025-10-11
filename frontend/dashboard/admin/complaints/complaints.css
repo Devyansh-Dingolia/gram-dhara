@@ -375,7 +375,6 @@ header {
     overflow: hidden;
     border: 1px solid #f0f0f0;
     min-height: 280px;
-    max-height: 350px;
 }
 
 .complaint-tile::before {
