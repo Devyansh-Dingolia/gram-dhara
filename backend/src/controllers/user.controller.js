@@ -235,7 +235,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const resetToken = user.getResetPasswordToken();
     await user.save({ validateBeforeSave: false });
 
-    const resetUrl = `http://127.0.0.1:5500/reset-password.html?token=${resetToken}`;
+    const resetUrl = `https://gram-dhara.vercel.app/reset-password.html?token=${resetToken}`;
     const message = `<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
             <h3 style="color: #1d4ed8;">Password Reset Request</h3>
             <p>You are receiving this email because a password reset was requested for your account on Gram Dhara.</p>
