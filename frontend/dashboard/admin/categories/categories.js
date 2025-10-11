@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let categories = [];
     let reports = [];
     let currentPage = 1;
-    let itemsPerPage = 10;
+    let itemsPerPage = 12;
     let totalPages = 1;
     let selectedCategoryId = null;
 
@@ -74,8 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Modal open/close
         createCategoryBtn.addEventListener('click', openCreateModal);
         cancelBtn.addEventListener('click', closeCreateModal);
-        editCancelBtn.addEventListener('click', closeEditModal);
-        deleteCancelBtn.addEventListener('click', closeDeleteModal);
 
         // Fix the close modal buttons functionality
         closeModalBtns.forEach(btn => {
@@ -101,12 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Form submissions
         categoryForm.addEventListener('submit', handleCreateCategory);
-        editCategoryForm.addEventListener('submit', handleUpdateCategory);
-        confirmDeleteBtn.addEventListener('click', handleDeleteCategory);
-
-        // Filters and sorting
-        statusFilterEl.addEventListener('change', filterAndSortCategories);
-        sortByEl.addEventListener('change', filterAndSortCategories);
 
         // Pagination
         prevPageBtn.addEventListener('click', () => {
@@ -471,14 +463,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const name = document.getElementById('category-name').value;
         const description = document.getElementById('category-description').value;
+        
+        // Show loading state on the submit button
+        const submitBtn = categoryForm.querySelector('.btn-submit');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
 
         try {
-            // Show loading state on the submit button
-            const submitBtn = categoryForm.querySelector('.btn-submit');
-            const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
-
             const newCategory = {
                 name: name,
                 description: description
@@ -510,6 +502,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const submitBtn = categoryForm.querySelector('.btn-submit');
             submitBtn.disabled = false;
             submitBtn.textContent = 'Create Category';
+        } finally {
+            // This block will ALWAYS run, whether the creation succeeded or failed.
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Category'; // Use textContent to avoid HTML injection
         }
     }
 
