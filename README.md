@@ -100,7 +100,7 @@ flowchart LR
         --> API["Express API"]
 
     API
-        --> Auth["Authentication<br/>JWT + RBAC"]
+        --> Auth["Authentication"]
 
     Auth
         --> Logic["Controllers"]
